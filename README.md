@@ -61,7 +61,7 @@ Total expected baseline requirements: 165 CPU Cores and 115 GB memory
 
 A high level architecture looks like this:
 
-![performance-architecture-1](.images/performance-architecture-1.png)
+![performance-architecture-2](.images/performance-architecture-2.png)
 
 ## In an ideal bin packing scenario
 
