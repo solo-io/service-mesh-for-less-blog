@@ -59,6 +59,10 @@ When calculating the baseline resource requirements without service mesh enabled
 
 Total expected baseline requirements: 165 CPU Cores and 115 GB memory
 
+A high level architecture looks like this:
+
+![performance-architecture-1](.images/performance-architecture-1.png)
+
 ## In an ideal bin packing scenario
 
 ![tetris-1](.images/tetris-1.png)
@@ -115,10 +119,6 @@ Our Loadgenerator Client Configuration:
   - Tune RPS with 25 connections starting at 200RPS
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
-
-A high level architecture looks like this:
-
-![performance-architecture-1](.images/performance-architecture-1.png)
 
 ## LinkerD Run 1
 
