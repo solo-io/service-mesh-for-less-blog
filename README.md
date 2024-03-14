@@ -18,7 +18,7 @@ In conversations with those further along in their service mesh journey, it's of
 But what if the user doesn't need these capabilities immediate near-term? Despite their potential benefits to the organization, the overhead costs of implementing and maintaining these additional value-add features also come at an expense and require a level of organizational maturity. Moreover, the costs are incurred regardless of their utilization, potentially pressuring the team to prioritize these features even if they're merely nice-to-haves.
 
 # Ambient Mesh
-[Ambient mesh](https://www.solo.io/blog/istio-ambient-mesh-evolution-service-mesh/) was launched on September 7th, 2022, introducing a new Istio data plane mode without sidecars that’s designed for simplified operations, broader application compatibility, and reduced infrastructure cost. Ambient splits Istio’s functionality into two distinct layers: the zero trust secure overlay layer, and optional Layer 7 processing layer. Compared with sidecars, this innovative layered approach allows users to easily adopt Istio incrementally, from no mesh, to the secure overlay, to full L7 processing as needed. This gives service mesh users two outstanding options from the same dedicated community: Istio with a sidecar model approach, or sidecarless Ambient mesh.
+[Ambient mesh](https://www.solo.io/blog/istio-ambient-mesh-evolution-service-mesh/) was launched on September 7th, 2022, introducing a new Istio data plane mode without sidecars that’s designed for simplified operations, broader application compatibility, and reduced infrastructure cost. Ambient splits Istio’s functionality into two distinct layers: the zero trust secure overlay layer, and optional Layer 7 processing layer. Compared with sidecars, the layered approach allows users to adopt Istio incrementally from no mesh, to the secure overlay, to full L7 processing as needed. This gives service mesh users two outstanding options from the same dedicated community: Istio with a sidecar model approach, or sidecarless Ambient mesh.
 
 ![ambient-mesh-architecture](.images/Istio-Ambient-Mesh-Zero-Trust-Security-1024x528.png)
 
@@ -99,7 +99,7 @@ All of these considerations go away when adopting a sidecarless service mesh arc
 
 # What about Performance?
 
-In the spirit of this blog post about doing more for less, we have already covered two initial goals of Ambient mesh in reducing infrastructure cost as well as simplifying operations, but what about performance?
+With the premise of this blog post focused on doing more for less, we have already covered two initial goals of Ambient mesh in reducing infrastructure cost as well as simplifying operations, but what about performance?
 
 Taking the example app above, we ran the following experiment to validate that Ambient mesh can perform at-par or better than the traditional sidecar based approach. For this test, we evaluated the same application deployed on a cluster with LinkerD against a cluster with Istio Ambient Mesh.
 
@@ -116,7 +116,7 @@ Our Loadgenerator Client Configuration:
 - Load generator per namespace targeting tier 1 application level
   - deployed to separate loadgen node pool
   - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - Tune RPS with 25 connections starting at 200RPS
+  - Each loadgen client is configured at 200 RPS
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
 

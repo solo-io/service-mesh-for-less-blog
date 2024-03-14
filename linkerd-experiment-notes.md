@@ -216,8 +216,9 @@ Total expected baseline requirements: 210 CPU Cores and 174GB memory
 - 12 application nodes (n2-standard-16)
 - 3 loadgenerator nodes (n2-standard-16)
 - Total CPU: 240 vCPU
-- stable 200 RPS across 50 load generators x 4 services per namespace totaling a mesh wide 40K RPS
+- stable 200 RPS across 50 load generators x 4 services per namespace totaling 10K RPS
 - Average latency in the 5-15ms, max latency under our target of <200ms
+- Average latency in the 4-6ms, max latency of <110ms which is lower than our target of <200ms
 
 - Number of Deployments using `k get deploy -A | wc -l`: 267
 - Number of Pods using `k get pods -A | grep Running | wc -l`: 335
