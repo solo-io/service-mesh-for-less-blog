@@ -6,7 +6,7 @@ helm repo update
 
 # install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.20.3 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.21.0 --create-namespace
 ```
 
 # install Kubernetes Gateway CRDs
@@ -21,7 +21,7 @@ kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
 ```bash
 helm upgrade --install istio-cni istio/cni \
 -n kube-system \
---version=1.20.3 \
+--version=1.21.0 \
 -f -<<EOF
 cni:
   enabled: true
@@ -53,7 +53,7 @@ EOF
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.20.3 \
+--version=1.21.0 \
 -f -<<EOF
 ## Discovery Settings
 pilot:
@@ -89,10 +89,10 @@ EOF
 ```bash
 helm upgrade --install ztunnel istio/ztunnel \
 -n istio-system \
---version=1.20.3 \
+--version=1.21.0 \
 -f -<<EOF
 hub: docker.io/istio
-tag: 1.20.3
+tag: 1.21.0
 resources:
   requests:
       cpu: 500m
