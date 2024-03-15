@@ -40,17 +40,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   --set proxy.resources.cpu.request=100m \
   --set proxy.resources.memory.request=128Mi \
   linkerd/linkerd-control-plane
-```
-
-Still seeing some jitter:
-% kubectl logs -l app=vegeta -f -c vegeta -n ns-3
-Requests      [total, rate, throughput]         120000, 200.00, 194.77
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.057ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.748ms, 59.051ms, 4.712ms, 5.917ms, 22.833ms, 2.142s, 2.995s
-Bytes In      [total, mean]                     324868342, 2707.24
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           97.39%
-Status Codes  [code:count]                      200:116864  500:3136  
+``` 
 
 # install linkerd-control-plane chart with increased proxy reservation requests
 ```bash
@@ -150,7 +140,7 @@ kubectl apply -k 50-loadgenerators
 
 # watch logs of vegeta loadgenerator
 ```bash
-kubectl logs -l app=vegeta -f -n ns-1
+kubectl logs -l app=vegeta -c vegeta -f -n ns-1
 ```
 
 # exec into vegeta
@@ -166,19 +156,6 @@ echo "GET http://tier-1-app-a.ns-1.svc.cluster.local:8080" | vegeta attack -dns-
 # uninstall
 helm uninstall linkerd-control-plane -n linkerd
 helm uninstall linkerd-crds -n linkerd
-
-# vegeta output at 225 RPS - a little inconsistent
-
-% kubectl logs -l app=vegeta -f -c vegeta -n ns-2
-Status Codes  [code:count]                      200:2250  
-Error Set:
-Requests      [total, rate, throughput]         2250, 225.11, 207.19
-Duration      [total, attack, wait]             10.86s, 9.995s, 864.611ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  13.85ms, 402.905ms, 390.067ms, 768.238ms, 813.112ms, 855.593ms, 864.611ms
-Bytes In      [total, mean]                     6145637, 2731.39
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:2250 
 
 # 50 namespace app notes
 - 50 namespace isolated applications

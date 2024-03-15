@@ -180,7 +180,7 @@ kubectl port-forward svc/kiali -n istio-system 20001:20001
 
 # uninstall
 ```bash
-helm uninstall ztunnel -n istio-system
+helm uninstall ztunnel -n kube-system
 helm uninstall istiod -n istio-system
 helm uninstall istio-cni -n kube-system
 helm uninstall istio-base -n istio-system
