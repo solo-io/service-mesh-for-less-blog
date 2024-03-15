@@ -79,7 +79,7 @@ Source: using the [Google Cloud Pricing Calculator](https://cloud.google.com/pro
 
 In reality, Kubernetes scheduling is not perfect, and inefficiencies in bin packing workloads will result in additional resources consumed (nodes created) so that all workloads can be scheduled. The following table shows the actual results of deploying the example application described in our test environment:
 
-![bin-packing-1](.images/bin-packing-1.png)
+![bin-packing-2](.images/bin-packing-2.png)
 
 The results mirror the goals of the Ambient project in both simplifying operations of the service mesh (no sidecars!) as well as reducing infrastructure costs (no additional cost to fulfill mTLS requirement). We also see an added benefit where if we decide to incrementally adopt the full L7 feature set by adopting waypoint proxies, the cost would be +18% from baseline using `ztunnel` + waypoint proxies vs. the traditional sidecar approach at +36%
 
@@ -124,118 +124,119 @@ Our Loadgenerator Client Configuration:
 
 Starting with LinkerD, we noticed that by default there are no proxy resource requests/limits defined, unlike Istio which sets the default sidecar proxy resource requests to `100m` CPU and `128Mi` MEM.
 
-Running our test, we produced results similar to the following:
+A of the test produced results similar to the following:
 ```bash
-% kubectl logs -l app=vegeta -f -c vegeta -n ns-3
-Requests      [total, rate, throughput]         120000, 200.00, 194.77
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.057ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.748ms, 59.051ms, 4.712ms, 5.917ms, 22.833ms, 2.142s, 2.995s
-Bytes In      [total, mean]                     324868342, 2707.24
+Namespace: ns-3
+Pod: vegeta-ns-3-76f777497-7bpnc
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.214ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.01ms, 4.968ms, 4.766ms, 5.138ms, 5.273ms, 5.675ms, 486.653ms
+Bytes In      [total, mean]                     327889353, 2732.41
 Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           97.39%
-Status Codes  [code:count]                      200:116864  500:3136  
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
+
+Namespace: ns-4
+Pod: vegeta-ns-4-656567db4-t9gpc
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.875ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.133ms, 5.227ms, 5.127ms, 5.864ms, 6.177ms, 6.942ms, 24.577ms
+Bytes In      [total, mean]                     327889731, 2732.41
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
 ```
 
-What we observed was that without proper resource requests defined the mean, p50, p90, and p95 latency percentiles were meeting our expectations, but p99 and max latencies were not. Furthermore, at some point in the test we observed several `500` errors, signaling that we might have been overloading the proxy.
+What we observed was that without proper resource requests defined the mean, p50-99 latency percentiles were meeting our expectations, but max latency was high in just a few namespaces. Not a a big deal, these are great numbers! But typically we would expect to guarantee some amount of resources to the proxy in order to avoid issues, so we'll explore this further in the next experiments to see if we do see any improvements when setting proxy resources. Overall though, pretty satisfied with the sub 4-8ms p99 latency!
 
 ## LinkerD Run 2
 
-To reduce the noise seen at the p99 and max latency for the initial run, we decided to set LinkerD proxy resources to match the defaults set by Istio discussed above. 
-
-A re-run of the test produced results similar to the following:
+We then tested setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the helm values
 ```bash
-% kubectl logs -l app=vegeta -f -c vegeta -n ns-14
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.732ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.957ms, 4.663ms, 4.589ms, 5.026ms, 5.238ms, 5.863ms, 25.743ms
-Bytes In      [total, mean]                     328128549, 2734.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
-
-% kubectl logs -l app=vegeta -f -c vegeta -n ns-10
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.431ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  4.084ms, 127.155ms, 5.349ms, 391.051ms, 606.356ms, 752.473ms, 817.085ms
-Bytes In      [total, mean]                     328128724, 2734.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
+--set proxy.cores=16
+--set proxy.resources.cpu.request=100m
+--set proxy.resources.memory.request=128Mi
 ```
 
-Here we see that specifying the resource requests resulted in improved performance and eliminated the `500` errors, but we were still observing inconsistent latency numbers in our results. Above is an output from two namespaces, the top with an outcome that is in line with what we expect, and the bottom with some inconsistency. Across all 50 namespaces we observed this inconsistency in 13 namespaces in our test run.
-
-## LinkerD Run 3
-
-Finally, we tested setting LinkerD proxy resources to double the default resources set by Istio at `200m` CPU and `256Mi` MEM per proxy and observed results that were in line with our performance criteria, with all 50 namespaces within the latency requirements expected for this experiment
+The observed results were in line with our performance criteria, with all 50 namespaces within the latency requirements expected for this experiment. Max latency was under our target of `200ms` and we also find that our P50-99 latency is sub `3-6ms`. Overall, it looks like configuring the proxy resource requirements did help the overall stability of our latency distribution
 
 A re-run of the test produced results similar to the following:
 ```bash
-% kubectl logs -l app=vegeta -c vegeta -n ns-1
+Namespace: ns-1
+Pod: vegeta-ns-1-546cbfb494-w2c6j
 Status Codes  [code:count]                      200:120000  
 Error Set:
 Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.638ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  4.073ms, 4.844ms, 4.726ms, 5.277ms, 5.549ms, 6.004ms, 55.691ms
-Bytes In      [total, mean]                     327768040, 2731.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.449ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.75ms, 4.622ms, 4.586ms, 5.011ms, 5.139ms, 5.496ms, 55.701ms
+Bytes In      [total, mean]                     327767428, 2731.40
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
+
+Namespace: ns-10
+Pod: vegeta-ns-10-695785d45d-sfrbr
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.123ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.954ms, 4.619ms, 4.584ms, 4.919ms, 5.045ms, 5.334ms, 32.461ms
+Bytes In      [total, mean]                     328727494, 2739.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:120000 
 
-% kubectl logs -l app=vegeta -c vegeta -n ns-10 
+Namespace: ns-20
+Pod: vegeta-ns-20-74586d4bbf-mddqf
 Status Codes  [code:count]                      200:120000  
 Error Set:
 Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.704ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.944ms, 4.71ms, 4.61ms, 5.033ms, 5.234ms, 5.699ms, 56.531ms
-Bytes In      [total, mean]                     328369889, 2736.42
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.356ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.542ms, 4.288ms, 4.215ms, 4.73ms, 4.879ms, 5.186ms, 57.637ms
+Bytes In      [total, mean]                     328727636, 2739.40
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
+
+Namespace: ns-30
+Pod: vegeta-ns-30-74dc6b75b-cmg2p
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.098ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.593ms, 4.73ms, 4.751ms, 5.086ms, 5.187ms, 5.527ms, 14.241ms
+Bytes In      [total, mean]                     328847277, 2740.39
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000 
+
+Namespace: ns-40
+Pod: vegeta-ns-40-767f8b695f-qzw27
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.815ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.973ms, 4.886ms, 4.874ms, 5.228ms, 5.352ms, 5.698ms, 46.946ms
+Bytes In      [total, mean]                     328849046, 2740.41
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
+
+Namespace: ns-50
+Pod: vegeta-ns-50-75f989684b-nq7dw
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.524ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.496ms, 4.659ms, 4.61ms, 5.196ms, 5.388ms, 5.745ms, 45.911ms
+Bytes In      [total, mean]                     329328436, 2744.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:120000
-
-% kubectl logs -l app=vegeta -c vegeta -n ns-20
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.317ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.892ms, 4.457ms, 4.407ms, 4.718ms, 4.871ms, 5.243ms, 39.458ms
-Bytes In      [total, mean]                     328484994, 2737.37
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000
-
-% kubectl logs -l app=vegeta -c vegeta -n ns-30
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.748ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  4.112ms, 4.888ms, 4.761ms, 5.401ms, 5.689ms, 6.212ms, 41.067ms
-Bytes In      [total, mean]                     328609303, 2738.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-% kubectl logs -l app=vegeta -c vegeta -n ns-40
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3.534ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.256ms, 4.03ms, 3.975ms, 4.346ms, 4.478ms, 4.891ms, 42.394ms
-Bytes In      [total, mean]                     328727224, 2739.39
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-% kubectl logs -l app=vegeta -c vegeta -n ns-50
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.406ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.689ms, 4.549ms, 4.489ms, 4.938ms, 5.164ms, 5.835ms, 11.804ms
-Bytes In      [total, mean]                     328491167, 2737.43
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
 ```
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
@@ -244,80 +245,87 @@ Below we can see the 30 minute history cluster CPU dashboard for this test run a
 
 # Ambient Run 1
 
-With Ambient, we don't have to worry about the sidecar proxy, so the test is rather simple:
+With Ambient, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
 - Deploy the applications
 - Run the load generator clients
 
 Running the same test that we did previously, we produced results similar to the following:
-```base
-% kubectl logs -l app=vegeta -f -n ns-1
-Status Codes  [code:count]                      200:180000  
-Error Set:
-Requests      [total, rate, throughput]         180000, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.869ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.27ms, 3.005ms, 2.966ms, 3.307ms, 3.444ms, 3.849ms, 55.613ms
-Bytes In      [total, mean]                     491654822, 2731.42
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180000
 
-% kubectl logs -l app=vegeta -n ns-10
-Status Codes  [code:count]                      200:180000  
+```bash
+Namespace: ns-1
+Pod: vegeta-ns-1-6b674f44dc-hkpvp
+Status Codes  [code:count]                      200:120000  
 Error Set:
-Requests      [total, rate, throughput]         180001, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.699ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.242ms, 2.836ms, 2.8ms, 3.097ms, 3.22ms, 3.573ms, 67.36ms
-Bytes In      [total, mean]                     493094559, 2739.40
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.833ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.156ms, 2.758ms, 2.734ms, 3.004ms, 3.105ms, 3.375ms, 35.071ms
+Bytes In      [total, mean]                     327167693, 2726.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180001 
+Status Codes  [code:count]                      200:120000  
 
-% kubectl logs -l app=vegeta -n ns-20
-Status Codes  [code:count]                      200:180000  
+Namespace: ns-10
+Pod: vegeta-ns-10-5648ff7589-cq4cx
+Status Codes  [code:count]                      200:120000  
 Error Set:
-Requests      [total, rate, throughput]         180000, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.614ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.1ms, 2.644ms, 2.618ms, 2.855ms, 2.951ms, 3.222ms, 78.651ms
-Bytes In      [total, mean]                     492373717, 2735.41
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.416ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.951ms, 2.676ms, 2.649ms, 2.928ms, 3.036ms, 3.3ms, 57.993ms
+Bytes In      [total, mean]                     327768457, 2731.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180000 
+Status Codes  [code:count]                      200:120000
 
-% kubectl logs -l app=vegeta -n ns-30
-Status Codes  [code:count]                      200:180000  
+Namespace: ns-20
+Pod: vegeta-ns-20-58f4b96874-k8rps
+Status Codes  [code:count]                      200:120000  
 Error Set:
-Requests      [total, rate, throughput]         180000, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.06ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  1.789ms, 3.042ms, 2.92ms, 3.862ms, 4.271ms, 5.832ms, 38.867ms
-Bytes In      [total, mean]                     492197230, 2734.43
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.567ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.228ms, 2.823ms, 2.799ms, 3.076ms, 3.183ms, 3.465ms, 34.041ms
+Bytes In      [total, mean]                     328128218, 2734.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180000 
+Status Codes  [code:count]                      200:120000  
 
-% kubectl logs -l app=vegeta -n ns-40
-Status Codes  [code:count]                      200:180000  
+Namespace: ns-30
+Pod: vegeta-ns-30-777b9cbc95-6f4lq
+Status Codes  [code:count]                      200:120000  
 Error Set:
-Requests      [total, rate, throughput]         180000, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.73ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.085ms, 2.631ms, 2.599ms, 2.875ms, 2.987ms, 3.337ms, 55.915ms
-Bytes In      [total, mean]                     493092022, 2739.40
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 3.219ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.122ms, 2.788ms, 2.767ms, 3.031ms, 3.134ms, 3.415ms, 25.038ms
+Bytes In      [total, mean]                     327888797, 2732.41
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180000 
+Status Codes  [code:count]                      200:120000 
 
-% kubectl logs -l app=vegeta -n ns-50
-Status Codes  [code:count]                      200:180000  
+Namespace: ns-40
+Pod: vegeta-ns-40-5c4c4f967b-tbvmz
+Status Codes  [code:count]                      200:120000  
 Error Set:
-Requests      [total, rate, throughput]         180000, 300.00, 300.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.621ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.21ms, 2.855ms, 2.83ms, 3.082ms, 3.185ms, 3.472ms, 54.359ms
-Bytes In      [total, mean]                     492373033, 2735.41
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.8ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.893ms, 2.589ms, 2.564ms, 2.857ms, 2.968ms, 3.253ms, 19.25ms
+Bytes In      [total, mean]                     327887404, 2732.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:180000 
+Status Codes  [code:count]                      200:120000 
+
+Namespace: ns-50
+Pod: vegeta-ns-50-6d6bd5dcc-5wwjt
+Status Codes  [code:count]                      200:120000  
+Error Set:
+Requests      [total, rate, throughput]         120000, 200.00, 200.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.334ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.909ms, 2.497ms, 2.474ms, 2.724ms, 2.823ms, 3.076ms, 39.393ms
+Bytes In      [total, mean]                     328130110, 2734.42
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:120000  
 ```
 
-Without any tuning of the default Ambient mesh settings, we achieved our application latency performance requirements on the first run test run!
+Without any tuning of the default Ambient mesh settings, we achieved our application latency performance requirements on the first run test run! Additionally, we can see the apparent benefits of sidecarless with our latency distribution in the sub `2-4ms` range for P50-P99 with network encryption secured over mTLS at a mesh-wide 10K RPS!
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 

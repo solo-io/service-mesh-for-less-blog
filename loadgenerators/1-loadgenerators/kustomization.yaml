@@ -4,8 +4,7 @@ kind: Kustomization
 
 # list of resources to be Applied
 resources:
-#- bombardier
-- vegeta
+- vegeta-ns-1.yaml
 
 # patch nodeSelector and tolerations on all Deployments
 patches:

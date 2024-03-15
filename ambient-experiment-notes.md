@@ -6,7 +6,7 @@ helm repo update
 
 # install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.20.3 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.21.0 --create-namespace
 ```
 
 # install Kubernetes Gateway CRDs
@@ -21,7 +21,7 @@ kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
 ```bash
 helm upgrade --install istio-cni istio/cni \
 -n kube-system \
---version=1.20.3 \
+--version=1.21.0 \
 -f -<<EOF
 cni:
   enabled: true
@@ -53,7 +53,7 @@ EOF
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.20.3 \
+--version=1.21.0 \
 -f -<<EOF
 ## Discovery Settings
 pilot:
@@ -86,13 +86,15 @@ EOF
 ```
 
 # install ztunnel
+
+For GKE, ztunnel is expected to be deployed in `kube-system`
 ```bash
 helm upgrade --install ztunnel istio/ztunnel \
--n istio-system \
---version=1.20.3 \
+-n kube-system \
+--version=1.21.0 \
 -f -<<EOF
 hub: docker.io/istio
-tag: 1.20.3
+tag: 1.21.0
 resources:
   requests:
       cpu: 500m
@@ -131,7 +133,7 @@ curl http://tier-1-app-a.ns-1.svc.cluster.local:8080
 
 # watch logs of ztunnel for traffic interception
 ```bash
-kubectl logs -n istio-system ds/ztunnel -f
+kubectl logs -n kube-system ds/ztunnel -f
 ```
 
 Output should look similar to below, note you can see the spiffe ID of client sleep
@@ -178,7 +180,7 @@ kubectl port-forward svc/kiali -n istio-system 20001:20001
 
 # uninstall
 ```bash
-helm uninstall ztunnel -n istio-system
+helm uninstall ztunnel -n kube-system
 helm uninstall istiod -n istio-system
 helm uninstall istio-cni -n kube-system
 helm uninstall istio-base -n istio-system
