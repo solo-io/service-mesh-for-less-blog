@@ -86,9 +86,11 @@ EOF
 ```
 
 # install ztunnel
+
+For GKE, ztunnel is expected to be deployed in `kube-system`
 ```bash
 helm upgrade --install ztunnel istio/ztunnel \
--n istio-system \
+-n kube-system \
 --version=1.21.0 \
 -f -<<EOF
 hub: docker.io/istio
