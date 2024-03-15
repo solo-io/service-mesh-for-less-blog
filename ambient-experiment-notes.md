@@ -133,7 +133,7 @@ curl http://tier-1-app-a.ns-1.svc.cluster.local:8080
 
 # watch logs of ztunnel for traffic interception
 ```bash
-kubectl logs -n istio-system ds/ztunnel -f
+kubectl logs -n kube-system ds/ztunnel -f
 ```
 
 Output should look similar to below, note you can see the spiffe ID of client sleep
