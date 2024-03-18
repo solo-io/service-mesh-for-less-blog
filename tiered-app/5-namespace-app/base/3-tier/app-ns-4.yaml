@@ -91,10 +91,10 @@ spec:
         # guaranteed qos  
         resources:
           requests:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
           limits:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
 ---
 apiVersion: v1
@@ -184,10 +184,10 @@ spec:
         # guaranteed qos  
         resources:
           requests:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
           limits:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
 ---
 apiVersion: v1
@@ -277,10 +277,10 @@ spec:
         # guaranteed qos  
         resources:
           requests:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
           limits:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
 ---
 apiVersion: v1
@@ -370,10 +370,10 @@ spec:
         # guaranteed qos  
         resources:
           requests:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
           limits:
-            cpu: "1000m"
+            cpu: "700m"
             memory: "500Mi"
 
 
