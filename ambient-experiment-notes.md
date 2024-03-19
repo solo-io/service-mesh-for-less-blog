@@ -103,6 +103,33 @@ istioNamespace: istio-system
 EOF
 ```
 
+# install ingressgateway (optional)
+```
+helm upgrade --install istio-ingress istio/gateway \
+-n istio-system \
+--version=1.21.0 \
+-f -<<EOF
+replicaCount: 1
+ 
+service:
+  # Type of service. Set to "None" to disable the service entirely
+  type: LoadBalancer
+  ports:
+  - name: http2
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+ 
+# Labels to apply to all resources
+labels:
+  istio: ingressgateway
+EOF
+```
+
 # deploy client into ambient mesh
 ```bash
 kubectl apply -k client/ambient
