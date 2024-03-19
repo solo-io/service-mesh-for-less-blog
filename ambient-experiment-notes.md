@@ -163,6 +163,12 @@ test run:
 echo "GET http://tier-1-app-a.ns-1.svc.cluster.local:8080" | vegeta attack -dns-ttl=0 -rate 500/1s -duration=2s | tee results.bin | vegeta report -type=text
 ```
 
+# watch top pods
+```bash
+watch kubectl top pods -n ns-1
+watch kubectl top pods -n kube-system --sort-by cpu
+```
+
 # deploy sample addons
 ```bash
 kubectl apply -k addons
