@@ -5,7 +5,7 @@ start_namespace=1
 end_namespace=50
 
 # Define the output file
-output_file="450rps-10m-30-app-istio-ambient-l4-run-data-run-1.md"
+output_file="450rps-10m-50-app-linkerd-default-istio-resources-data-run-3.md"
 
 # Define label selector for pods
 label_selector="app=vegeta"  # Modify this label selector as per your requirement
