@@ -108,7 +108,7 @@ First we set some baseline performance requirements for our 3-tier application w
 Our application latency expectations:
 - Max P50 latency < 20ms
 - Max P99 latency < 30ms
-- Desired CPU utilization of the cluster around > 25% (visualized in GKE Observability)
+- Desired CPU utilization of the cluster greater than 25% (visualized in GKE Observability)
 
 We configured a Vegeta loadgenerator client per-namespace with a guaranteed QoS by setting resource requests/limits to `500m` CPU and `300Mi` MEM for this experiment:
 
@@ -157,10 +157,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across several 10 minute runs:
-- P50 latency ~`1.5ms`
-- P99 latency ~`2.1ms`
+- lowest P50 latency ~`1.5ms`
+- highest P99 latency ~`2.1ms`
 
-We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`.Full results for the baseline tests can be seen in the `/experiment-data` directory
+We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`. Full results for the baseline tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 ![50-app-baseline-gke-observability.png](.images/50-app-baseline-gke-observability.png)
@@ -170,7 +170,7 @@ Below we can see the 30 minute history cluster CPU dashboard for this test run a
 
 Starting with LinkerD, we noticed that by default there are no proxy resource requests/limits defined, unlike Istio which sets the default sidecar proxy resource requests to `100m` CPU and `128Mi` MEM.
 
-While the results of our test were acceptable without any resource requests defined for the proxies (sub `4-8ms` p99 latency), it generally is not a recommended way of running a service mesh. In order to create an accurate comparison, we decided to test setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the helm values
+While the results of our test were acceptable without any resource requests defined for the proxies (sub `4-8ms` p99 latency), it generally is not a recommended way of running a service mesh in a production environment. In order to create an accurate comparison, we decided to test setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the Helm values
 ```bash
 --set proxy.cores=8
 --set proxy.resources.cpu.request=100m
@@ -214,7 +214,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `4.1ms`
 - highest P99 latency `6.5ms`
 
-From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 
