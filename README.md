@@ -1,4 +1,4 @@
-# Ambient Mesh - Doing More for Less!
+# Istio Ambient Mode - Doing More for Less!
 
 With the introduction of Istio Ambient mesh, platform teams can more efficiently adopt service mesh features without introducing a significant resource overhead to their end consumers.
 
@@ -17,7 +17,7 @@ In conversations with those further along in their service mesh journey, it's of
 
 But what if the user doesn't need these capabilities immediate near-term? Despite their potential benefits to the organization, the overhead costs of implementing and maintaining these additional value-add features also come at an expense and require a level of organizational maturity. Moreover, the costs are incurred regardless of their utilization, potentially pressuring the team to prioritize these features even if they're merely nice-to-haves.
 
-# Ambient Mesh
+# Ambient Mode
 [Ambient mesh](https://www.solo.io/blog/istio-ambient-mesh-evolution-service-mesh/) was launched on September 7th, 2022, introducing a new Istio data plane mode without sidecars that’s designed for simplified operations, broader application compatibility, and reduced infrastructure cost. Ambient splits Istio’s functionality into two distinct layers: the zero trust secure overlay layer, and optional Layer 7 processing layer. Compared with sidecars, the layered approach allows users to adopt Istio incrementally from no mesh, to the secure overlay, to full L7 processing as needed. This gives service mesh users two outstanding options from the same dedicated community: Istio with a sidecar model approach, or sidecarless Ambient mesh.
 
 ![ambient-mesh-architecture](.images/Istio-Ambient-Mesh-Zero-Trust-Security-1024x528.png)
@@ -46,9 +46,9 @@ Application Details:
 
 Load Generator Details:
 - Load generator per namespace targeting tier 1 application level
-  - deployed to separate loadgen node pool
+  - deployed to separate loadgen node pool to ensure unbiased performance measurements by preventing resource contention and interference 
   - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - RPS tuned with 25 connections
+  - Each loadgen client is configured at 450 RPS for a total of *22.5K RPS cluster-wide*
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
 
@@ -101,149 +101,179 @@ All of these considerations go away when adopting a sidecarless service mesh arc
 
 With the premise of this blog post focused on doing more for less, we have already covered two initial goals of Ambient mesh in reducing infrastructure cost as well as simplifying operations, but what about performance?
 
-Taking the example app above, we ran the following experiment to validate that Ambient mesh can perform at-par or better than the traditional sidecar based approach. For this test, we evaluated the same application deployed on a cluster with LinkerD against a cluster with Istio Ambient Mesh.
+Taking the example app above, we ran the following experiment to validate that Ambient mesh can perform at-par or better than the traditional sidecar based approach. For this test, we evaluated the same application deployed on a cluster with LinkerD against a cluster with Istio Ambient Mode.
 
 First we set some baseline performance requirements for our 3-tier application workload that is deployed across 50 namespaces. 
 
 Our application latency expectations:
-- Average latency < 40ms
-- Max latency < 200ms
-- Expected CPU utilization tuned to around 20-40% (visualized in GKE Observability)
+- Max P50 latency < 20ms
+- Max P99 latency < 30ms
+- Desired CPU utilization of the cluster around > 25% (visualized in GKE Observability)
 
 We configured a Vegeta loadgenerator client per-namespace with a guaranteed QoS by setting resource requests/limits to `500m` CPU and `300Mi` MEM for this experiment:
 
 Our Loadgenerator Client Configuration:
 - Load generator per namespace targeting tier 1 application level
-  - deployed to separate loadgen node pool
-  - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - Each loadgen client is configured at 200 RPS
+  - deployed to separate loadgen node pool to ensure unbiased performance measurements by preventing resource contention and interference
+  - using n2-standard-8 spot instances in autoscaling mode
+  - Each loadgen client is configured at 450 RPS for a total of *22.5K RPS cluster-wide*
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
 
-## LinkerD Run 1
+## Baseline testing
+Starting with our baseline application (no mesh) to understand the base performance characteristics
+
+A run of the test produced results similar to the following:
+```bash
+Namespace: ns-1
+Pod: vegeta-ns-1-7fdb65c5d4-6mg47
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 1.682ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.237ms, 1.612ms, 1.592ms, 1.757ms, 1.842ms, 2.099ms, 11.693ms
+Bytes In      [total, mean]                     736131394, 2726.41
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000 
+
+Namespace: ns-25
+Pod: vegeta-ns-25-7c9b875bc4-xwt5f
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 1.419ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.269ms, 1.557ms, 1.533ms, 1.677ms, 1.754ms, 2.011ms, 65.268ms
+Bytes In      [total, mean]                     737205508, 2730.39
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+
+Namespace: ns-50
+Pod: vegeta-ns-50-78d5d67cfd-2jqmd
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 1.567ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.292ms, 1.618ms, 1.589ms, 1.778ms, 1.864ms, 2.151ms, 22.973ms
+Bytes In      [total, mean]                     739102382, 2737.42
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+```
+
+### Results across several 10 minute runs:
+- P50 latency ~`1.5ms`
+- P99 latency ~`2.1ms`
+
+We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`.Full results for the baseline tests can be seen in the `/experiment-data` directory
+
+Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
+![50-app-baseline-gke-observability.png](.images/50-app-baseline-gke-observability.png)
+
+
+## LinkerD testing with v1.16.11
 
 Starting with LinkerD, we noticed that by default there are no proxy resource requests/limits defined, unlike Istio which sets the default sidecar proxy resource requests to `100m` CPU and `128Mi` MEM.
 
-A of the test produced results similar to the following:
+While the results of our test were acceptable without any resource requests defined for the proxies (sub `4-8ms` p99 latency), it generally is not a recommended way of running a service mesh. In order to create an accurate comparison, we decided to test setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the helm values
 ```bash
-Namespace: ns-3
-Pod: vegeta-ns-3-76f777497-7bpnc
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.214ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  4.01ms, 4.968ms, 4.766ms, 5.138ms, 5.273ms, 5.675ms, 486.653ms
-Bytes In      [total, mean]                     327889353, 2732.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
-
-Namespace: ns-4
-Pod: vegeta-ns-4-656567db4-t9gpc
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.875ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  4.133ms, 5.227ms, 5.127ms, 5.864ms, 6.177ms, 6.942ms, 24.577ms
-Bytes In      [total, mean]                     327889731, 2732.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
-```
-
-What we observed was that without proper resource requests defined the mean, p50-99 latency percentiles were meeting our expectations, but max latency was high in just a few namespaces. Not a a big deal, these are great numbers! But typically we would expect to guarantee some amount of resources to the proxy in order to avoid issues, so we'll explore this further in the next experiments to see if we do see any improvements when setting proxy resources. Overall though, pretty satisfied with the sub 4-8ms p99 latency!
-
-## LinkerD Run 2
-
-We then tested setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the helm values
-```bash
---set proxy.cores=16
+--set proxy.cores=8
 --set proxy.resources.cpu.request=100m
 --set proxy.resources.memory.request=128Mi
 ```
 
-The observed results were in line with our performance criteria, with all 50 namespaces within the latency requirements expected for this experiment. Max latency was under our target of `200ms` and we also find that our P50-99 latency is sub `3-6ms`. Overall, it looks like configuring the proxy resource requirements did help the overall stability of our latency distribution
-
-A re-run of the test produced results similar to the following:
+A run of the test produced results similar to the following:
 ```bash
 Namespace: ns-1
-Pod: vegeta-ns-1-546cbfb494-w2c6j
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.449ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.75ms, 4.622ms, 4.586ms, 5.011ms, 5.139ms, 5.496ms, 55.701ms
-Bytes In      [total, mean]                     327767428, 2731.40
+Pod: vegeta-ns-1-7fdb65c5d4-zw66v
+Requests      [total, rate, throughput]         270001, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.655ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.532ms, 4.614ms, 4.55ms, 5.074ms, 5.279ms, 5.86ms, 24.758ms
+Bytes In      [total, mean]                     737484998, 2731.42
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
+Status Codes  [code:count]                      200:270001  
 
-Namespace: ns-10
-Pod: vegeta-ns-10-695785d45d-sfrbr
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.123ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.954ms, 4.619ms, 4.584ms, 4.919ms, 5.045ms, 5.334ms, 32.461ms
-Bytes In      [total, mean]                     328727494, 2739.40
+Namespace: ns-25
+Pod: vegeta-ns-25-7c9b875bc4-rb2vh
+Requests      [total, rate, throughput]         270001, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.198ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.426ms, 4.491ms, 4.41ms, 4.98ms, 5.215ms, 5.872ms, 21.354ms
+Bytes In      [total, mean]                     739379290, 2738.43
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-Namespace: ns-20
-Pod: vegeta-ns-20-74586d4bbf-mddqf
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 5.356ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.542ms, 4.288ms, 4.215ms, 4.73ms, 4.879ms, 5.186ms, 57.637ms
-Bytes In      [total, mean]                     328727636, 2739.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
-
-Namespace: ns-30
-Pod: vegeta-ns-30-74dc6b75b-cmg2p
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.098ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.593ms, 4.73ms, 4.751ms, 5.086ms, 5.187ms, 5.527ms, 14.241ms
-Bytes In      [total, mean]                     328847277, 2740.39
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-Namespace: ns-40
-Pod: vegeta-ns-40-767f8b695f-qzw27
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.815ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.973ms, 4.886ms, 4.874ms, 5.228ms, 5.352ms, 5.698ms, 46.946ms
-Bytes In      [total, mean]                     328849046, 2740.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
+Status Codes  [code:count]                      200:270001  
 
 Namespace: ns-50
-Pod: vegeta-ns-50-75f989684b-nq7dw
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 4.524ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  3.496ms, 4.659ms, 4.61ms, 5.196ms, 5.388ms, 5.745ms, 45.911ms
-Bytes In      [total, mean]                     329328436, 2744.40
+Pod: vegeta-ns-50-78d5d67cfd-46qkb
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 4.179ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  3.586ms, 4.267ms, 4.211ms, 4.586ms, 4.755ms, 5.295ms, 29.996ms
+Bytes In      [total, mean]                     738561561, 2735.41
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000
+Status Codes  [code:count]                      200:270000 
 ```
+
+### Results across several 10 minute runs:
+- lowest P50 latency `4.1ms`
+- highest P99 latency `6.5ms`
+
+From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 
 ![50-app-linkerd-gke-observability.png](.images/50-app-linkerd-gke-observability.png)
 
-# Ambient Run 1
+## Istio Sidecar testing with v1.21.0
+
+Next we ran the same test using the traditional Istio sidecar mode, keeping the same default proxy reservation requests of `100m` CPU and `128Mi` MEM.
+
+A run of the test produced results similar to the following:
+```bash
+Namespace: ns-1
+Pod: vegeta-ns-1-7fdb65c5d4-484c5
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.842ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.287ms, 7.031ms, 6.848ms, 7.974ms, 8.525ms, 10.049ms, 98.891ms
+Bytes In      [total, mean]                     819315334, 3034.50
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000 
+
+Namespace: ns-25
+Pod: vegeta-ns-25-7c9b875bc4-8q9gz
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.786ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.448ms, 7.837ms, 7.55ms, 9.383ms, 10.235ms, 12.179ms, 73.324ms
+Bytes In      [total, mean]                     821216964, 3041.54
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000 
+
+Namespace: ns-50
+Pod: vegeta-ns-50-78d5d67cfd-6spmz
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.058ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.178ms, 6.716ms, 6.576ms, 7.475ms, 7.977ms, 9.509ms, 65.94ms
+Bytes In      [total, mean]                     821474341, 3042.50
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000 
+```
+
+### Results across several 10 minute runs:
+- lowest P50 latency `6.3ms`
+- highest P99 latency `14.3ms`
+
+From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `4.8ms - 12.2ms` of latency to our application round-trip. Full results for the sidecar tests can be seen in the `/experiment-data` directory
+
+Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
+
+![50-app-sidecar-gke-observability.png](.images/50-app-sidecar-gke-observability.png)
+
+## Istio Ambient Mode testing with v1.21.0
 
 With Ambient, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
 - Deploy the applications
@@ -253,79 +283,41 @@ Running the same test that we did previously, we produced results similar to the
 
 ```bash
 Namespace: ns-1
-Pod: vegeta-ns-1-6b674f44dc-hkpvp
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.833ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.156ms, 2.758ms, 2.734ms, 3.004ms, 3.105ms, 3.375ms, 35.071ms
-Bytes In      [total, mean]                     327167693, 2726.40
+Pod: vegeta-ns-1-7fdb65c5d4-fthdc
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.503ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.018ms, 2.536ms, 2.489ms, 2.718ms, 2.826ms, 3.165ms, 57.766ms
+Bytes In      [total, mean]                     737478926, 2731.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
+Status Codes  [code:count]                      200:270000  
 
-Namespace: ns-10
-Pod: vegeta-ns-10-5648ff7589-cq4cx
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.416ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  1.951ms, 2.676ms, 2.649ms, 2.928ms, 3.036ms, 3.3ms, 57.993ms
-Bytes In      [total, mean]                     327768457, 2731.40
+Namespace: ns-25
+Pod: vegeta-ns-25-7c9b875bc4-8rglb
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.722ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.122ms, 2.669ms, 2.63ms, 2.911ms, 3.029ms, 3.396ms, 47.424ms
+Bytes In      [total, mean]                     740181069, 2741.41
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000
-
-Namespace: ns-20
-Pod: vegeta-ns-20-58f4b96874-k8rps
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.567ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.228ms, 2.823ms, 2.799ms, 3.076ms, 3.183ms, 3.465ms, 34.041ms
-Bytes In      [total, mean]                     328128218, 2734.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
+Status Codes  [code:count]                      200:270000 
 
 Namespace: ns-30
-Pod: vegeta-ns-30-777b9cbc95-6f4lq
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3.219ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.122ms, 2.788ms, 2.767ms, 3.031ms, 3.134ms, 3.415ms, 25.038ms
-Bytes In      [total, mean]                     327888797, 2732.41
+Pod: vegeta-ns-30-7f5787c66d-q2w9g
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.693ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.032ms, 2.587ms, 2.541ms, 2.806ms, 2.923ms, 3.295ms, 42.54ms
+Bytes In      [total, mean]                     740178921, 2741.40
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-Namespace: ns-40
-Pod: vegeta-ns-40-5c4c4f967b-tbvmz
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.8ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  1.893ms, 2.589ms, 2.564ms, 2.857ms, 2.968ms, 3.253ms, 19.25ms
-Bytes In      [total, mean]                     327887404, 2732.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000 
-
-Namespace: ns-50
-Pod: vegeta-ns-50-6d6bd5dcc-5wwjt
-Status Codes  [code:count]                      200:120000  
-Error Set:
-Requests      [total, rate, throughput]         120000, 200.00, 200.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.334ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  1.909ms, 2.497ms, 2.474ms, 2.724ms, 2.823ms, 3.076ms, 39.393ms
-Bytes In      [total, mean]                     328130110, 2734.42
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:120000  
+Status Codes  [code:count]                      200:270000  
 ```
 
-Without any tuning of the default Ambient mesh settings, we achieved our application latency performance requirements on the first run test run! Additionally, we can see the apparent benefits of sidecarless with our latency distribution in the sub `2-4ms` range for P50-P99 with network encryption secured over mTLS at a mesh-wide 10K RPS!
+### Results across several 10 minute runs:
+- lowest P50 latency `2.4ms`
+- highest P99 latency `4.1ms`
+
+From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 2ms` of latency to our application round-trip. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 
@@ -333,12 +325,20 @@ Below we can see the 30 minute history cluster CPU dashboard for this test run a
 
 # Conclusion
 
-In this blog we explored three main value propositions for Istio Ambient Mesh
+In this blog we explored three main value propositions for Istio Ambient Mode
 - Simplify operations of the service mesh
 - Reduce infrastructure costs
 - Improved resource utilization and application performance
 
-In our hypothetical scenario detailed in this experiment, the adoption of Ambient mesh fulfills the mTLS mandate that was implemented by the Security team without imposing any additional cost to the Application team. Furthermore, adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from the improved resource utilization while maintaining or even improving application performance. It is clear here that we are benefitting while doing more for less!
+In our hypothetical scenario detailed in this experiment, the adoption of Ambient mesh fulfills the mTLS mandate that was implemented by the Security team without imposing any additional cost to the Application team. From a performance perspective, we can see that the additional latency cost incurred by utilizing a mesh is as follows for our sample 3-tier application deployed across 50 namespaces with 50 loadgenerator clients pushing a cluster-wide total of 22.5K RPS (450RPS per client)
+
+- LinkerD: `+2.6ms - 4.4ms`
+- Istio Sidecar Mode: `+4.8ms - 12.2ms`
+- Istio Ambient Mode: `+0.9ms - 2ms`
+
+As you can see, the introduction of Ambient mode can improve our expected latency performance by up to *65% faster for p50* and *55% faster for p99*!
+
+Furthermore, adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from the improved resource utilization while maintaining or even improving application performance. It is clear here that we are benefitting while doing more for less!
 
 As Solo.io is a co-founder of the Istio ambient sidecar-less architecture and leads the development upstream in the Istio community, we are uniquely positioned to help our customers adopt this architecture for production security and compliance requirements. [Please reach out to us to talk with an expert.](https://www.solo.io/company/contact/)
 

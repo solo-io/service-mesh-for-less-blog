@@ -1,14 +1,17 @@
 # Create a new cluster
 
 ## Set core cluster variables
+```
 GKE_CLUSTER_NAME="gke-linkerd-1"
-GKE_CLUSTER_ZONE="us-east1-b"
-MAIN_MACHINE_TYPE="n2-standard-16"
-MAIN_NUM_NODES=""
+GKE_CLUSTER_ZONE="us-west4-b"
+MAIN_MACHINE_TYPE="n2-standard-8"
+MAIN_NUM_NODES="30"
 GKE_PROJECT=""
 CLUSTER_VERSION="1.28.3-gke.1118000"
+```
 
 # Create Cluster
+```
 gcloud container clusters create ${GKE_CLUSTER_NAME} \
   --cluster-version ${CLUSTER_VERSION} \
   --no-enable-autoupgrade \
@@ -18,30 +21,34 @@ gcloud container clusters create ${GKE_CLUSTER_NAME} \
   --project ${GKE_PROJECT} \
   --logging NONE \
   --spot
-
-Note: can add NodeLocalDNS with the following flag, but also turning on keep-alives on the client helps relieve kube-dns
-  --addons=NodeLocalDNS \  
+```
 
 # resize default pool
+```
 gcloud container clusters resize ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} --num-nodes 0 --node-pool default-pool
-
+```
 
 # delete
+```
 GKE_CLUSTER_NAME="gke-linkerd-1"
 gcloud container clusters delete ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} --project ${GKE_PROJECT}
+```
 
 # Load Generator Node Pool (spot)
 
 ## new node pool variables
-GKE_NODE_POOL_NAME="gke-linkerd-1-lg-spot-16cpu"
-POOL_MACHINE_TYPE="n2-standard-16"
-POOL_NUM_NODES="1"
+```
+GKE_NODE_POOL_NAME="gke-linkerd-1-lg-spot-8cpu"
+POOL_MACHINE_TYPE="n2-standard-8"
+POOL_NUM_NODES="5"
 POOL_MIN_NODES="1"
 POOL_MAX_NODES="6"
 POOL_NODE_TAINTS="cloud.google.com/node="loadgen":NoSchedule"
 POOL_NODE_LABELS="node="loadgen""
+```
 
 # Create the node pool
+```
 gcloud container node-pools create ${GKE_NODE_POOL_NAME} \
   --cluster ${GKE_CLUSTER_NAME} \
   --zone ${GKE_CLUSTER_ZONE} \
@@ -54,26 +61,12 @@ gcloud container node-pools create ${GKE_NODE_POOL_NAME} \
   --node-taints=${POOL_NODE_TAINTS} \
   --node-labels=${POOL_NODE_LABELS} \
   --spot
-
-# enable NodeLocal DNSCache
-gcloud container clusters update ${GKE_CLUSTER_NAME} \
-    --zone ${GKE_CLUSTER_ZONE} \
-    --project ${GKE_PROJECT} \
-    --update-addons=NodeLocalDNS=ENABLED
-
-# scale kube-dns
-kubectl edit configmap kube-dns-autoscaler --namespace=kube-system
-
-To scale up, change nodesPerReplica to a smaller value and include a min and max value.
-nodesPerReplica: 2
-min: 5
-max: 10
-
-linear: '{"coresPerReplica":256, "nodesPerReplica":4,"max": 15,"min": 5,"preventSinglePointFailure":true}'
+```
 
 # other notes
 
 ### add a toleration to loadgenerator deployment
+```
 nodeSelector:
   node: "loadgen"
 tolerations:
@@ -81,3 +74,29 @@ tolerations:
   operator: Equal
   value: "loadgen"
   effect: NoSchedule  
+```
+
+# NodeLocalDNS
+Note: can add NodeLocalDNS with the following flag, but also turning on keep-alives on the client helps relieve kube-dns
+  --addons=NodeLocalDNS \  
+
+# enable NodeLocal DNSCache post install
+```
+gcloud container clusters update ${GKE_CLUSTER_NAME} \
+    --zone ${GKE_CLUSTER_ZONE} \
+    --project ${GKE_PROJECT} \
+    --update-addons=NodeLocalDNS=ENABLED
+```
+
+# scale kube-dns
+```
+kubectl edit configmap kube-dns-autoscaler --namespace=kube-system
+
+
+To scale up, change nodesPerReplica to a smaller value and include a min and max value.
+nodesPerReplica: 2
+min: 5
+max: 10
+
+linear: '{"coresPerReplica":256, "nodesPerReplica":4,"max": 15,"min": 5,"preventSinglePointFailure":true}'
+```
