@@ -332,9 +332,9 @@ In this blog we explored three main value propositions for Istio Ambient Mode
 
 In our hypothetical scenario detailed in this experiment, the adoption of Ambient mesh fulfills the mTLS mandate that was implemented by the Security team without imposing any additional cost to the Application team. From a performance perspective, we can see that the additional latency cost incurred by utilizing a mesh is as follows for our sample 3-tier application deployed across 50 namespaces with 50 loadgenerator clients pushing a cluster-wide total of 22.5K RPS (450RPS per client)
 
-- LinkerD: +`2.6ms - 4.4ms`
-- Istio Sidecar Mode: +`4.8ms - 12.2ms`
-- Istio Ambient Mode: +`0.9ms - 2ms`
+- LinkerD: `+2.6ms - 4.4ms`
+- Istio Sidecar Mode: `+4.8ms - 12.2ms`
+- Istio Ambient Mode: `+0.9ms - 2ms`
 
 As you can see, the introduction of Ambient mode can improve our expected latency performance by up to *65% faster for p50* and *55% faster for p99*!
 
