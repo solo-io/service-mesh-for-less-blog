@@ -153,6 +153,23 @@ watch kubectl top pods -n ns-1
 watch kubectl top pods -n kube-system --sort-by cpu
 ```
 
+## collect logs
+In the `experiment-data/tail-logs.sh` script change the following variables
+```
+# Define the range of namespaces
+start_namespace=1
+end_namespace=50
+
+# Define the output file
+output_file="450rps-10m-50-app-linkerd-default-istio-resources-data-run-1.md"
+```
+
+Run the script to collect logs:
+```
+cd experiment-data
+./tail-logs.sh
+```
+
 ## example exec into vegeta to run your own test (optional)
 ```bash
 kubectl --namespace ns-1 exec -it deploy/vegeta -c vegeta -- /bin/sh
