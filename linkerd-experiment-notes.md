@@ -15,7 +15,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
-  --set proxy.cores=16 \
+  --set proxy.cores=8 \
   linkerd/linkerd-control-plane
 ```
 
@@ -26,7 +26,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
-  --set proxy.cores=16 \
+  --set proxy.cores=8 \
   --set proxy.resources.cpu.request=50m \
   --set proxy.resources.memory.request=128Mi \
   linkerd/linkerd-control-plane
@@ -39,7 +39,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
-  --set proxy.cores=16 \
+  --set proxy.cores=8 \
   --set proxy.resources.cpu.request=100m \
   --set proxy.resources.memory.request=128Mi \
   linkerd/linkerd-control-plane
@@ -52,7 +52,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
-  --set proxy.cores=16 \
+  --set proxy.cores=8 \
   --set proxy.resources.cpu.request=200m \
   --set proxy.resources.memory.request=256Mi \
   linkerd/linkerd-control-plane
