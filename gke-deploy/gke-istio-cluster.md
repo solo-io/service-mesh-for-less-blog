@@ -2,10 +2,10 @@
 
 ## Set core cluster variables
 ```
-GKE_CLUSTER_NAME="gke-linkerd-1"
+GKE_CLUSTER_NAME="gke-istio-sidecar-1"
 GKE_CLUSTER_ZONE="us-west4-b"
 MAIN_MACHINE_TYPE="n2-standard-8"
-MAIN_NUM_NODES="30"
+MAIN_NUM_NODES=""
 GKE_PROJECT=""
 CLUSTER_VERSION="1.28.3-gke.1118000"
 ```
@@ -30,7 +30,7 @@ gcloud container clusters resize ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} 
 
 # delete
 ```
-GKE_CLUSTER_NAME="gke-linkerd-1"
+GKE_CLUSTER_NAME="gke-istio-sidecar-1"
 gcloud container clusters delete ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} --project ${GKE_PROJECT}
 ```
 
@@ -38,7 +38,7 @@ gcloud container clusters delete ${GKE_CLUSTER_NAME} --zone ${GKE_CLUSTER_ZONE} 
 
 ## new node pool variables
 ```
-GKE_NODE_POOL_NAME="gke-linkerd-1-lg-spot-8cpu"
+GKE_NODE_POOL_NAME="gke-istio-sidecar-1-lg-spot-8cpu"
 POOL_MACHINE_TYPE="n2-standard-8"
 POOL_NUM_NODES="5"
 POOL_MIN_NODES="1"
