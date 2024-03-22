@@ -8,7 +8,7 @@ helm repo add linkerd https://helm.linkerd.io/stable
 helm install linkerd-crds linkerd/linkerd-crds -n linkerd --version 1.8.0 --create-namespace
 ```
 
-# install linkerd-control-plane chart default (no reservation requests)
+# install linkerd-control-plane chart with default no reservation requests set
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
   --version 1.16.11 \
@@ -19,7 +19,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   linkerd/linkerd-control-plane
 ```
 
-# install linkerd-control-plane chart with proxy reservation requests (half istio default cpu req)
+# install linkerd-control-plane chart with half istio proxy reservation requests
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
   --version 1.16.11 \
@@ -32,7 +32,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   linkerd/linkerd-control-plane
 ```
 
-# install linkerd-control-plane chart with proxy reservation requests
+# install linkerd-control-plane chart with default istio proxy reservation requests
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
   --version 1.16.11 \
@@ -45,7 +45,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
   linkerd/linkerd-control-plane
 ``` 
 
-# install linkerd-control-plane chart with increased proxy reservation requests
+# install linkerd-control-plane chart with double istio proxy reservation requests
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
   --version 1.16.11 \
