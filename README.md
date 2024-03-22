@@ -267,7 +267,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `6.3ms`
 - highest P99 latency `14.3ms`
 
-From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `4.8ms - 12.2ms` of latency to our application round-trip. Full results for the sidecar tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `4.8ms - 12.2ms` of latency to our application round-trip for our 3-tier service. Full results for the sidecar tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 
@@ -317,7 +317,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `2.4ms`
 - highest P99 latency `4.1ms`
 
-From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 2ms` of latency to our application round-trip. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
 
 Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
 
