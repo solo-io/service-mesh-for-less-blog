@@ -336,7 +336,7 @@ In our hypothetical scenario detailed in this experiment, the adoption of Ambien
 - Istio Sidecar Mode: `+4.8ms - 12.2ms`
 - Istio Ambient Mode: `+0.9ms - 2ms`
 
-As you can see, the introduction of Ambient mode can improve our expected latency performance by up to *65% faster for p50* and *55% faster for p99*!
+As you can see, the introduction of Ambient mode can improve our expected latency performance by up to *65% faster for p50* and *55% faster for p99* compared to traditional sidecar based architectures!
 
 Furthermore, adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from the improved resource utilization while maintaining or even improving application performance. It is clear here that we are benefitting while doing more for less!
 
