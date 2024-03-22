@@ -5,12 +5,13 @@ helm repo add linkerd https://helm.linkerd.io/stable
 
 # install linkerd crds
 ```bash
-helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace
+helm install linkerd-crds linkerd/linkerd-crds -n linkerd --version 1.8.0 --create-namespace
 ```
 
 # install linkerd-control-plane chart default (no reservation requests)
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
+  --version 1.16.11 \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
@@ -21,6 +22,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
 # install linkerd-control-plane chart with proxy reservation requests (half istio default cpu req)
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
+  --version 1.16.11 \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
@@ -33,6 +35,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
 # install linkerd-control-plane chart with proxy reservation requests
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
+  --version 1.16.11 \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
@@ -45,6 +48,7 @@ helm upgrade --install linkerd-control-plane -n linkerd \
 # install linkerd-control-plane chart with increased proxy reservation requests
 ```bash
 helm upgrade --install linkerd-control-plane -n linkerd \
+  --version 1.16.11 \
   --set-file identityTrustAnchorsPEM=ca.crt \
   --set-file identity.issuer.tls.crtPEM=issuer.crt \
   --set-file identity.issuer.tls.keyPEM=issuer.key \
