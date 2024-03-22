@@ -102,6 +102,15 @@ resources:
       cpu: 500m
       memory: 2048Mi
 istioNamespace: istio-system
+# Additional volumeMounts to the ztunnel container
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+# Additional volumes to the ztunnel pod
+volumes:
+  - name: tmp
+    emptyDir:
+      medium: Memory
 EOF
 ```
 
