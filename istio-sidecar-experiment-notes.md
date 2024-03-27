@@ -79,7 +79,7 @@ curl httpbin.httpbin.svc.cluster.local:8000/get
 
 ## remove httpbin
 ```bash
-kubectl delete -k httpbin/ambient
+kubectl delete -k httpbin/sidecar
 ```
 
 
