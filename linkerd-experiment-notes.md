@@ -132,7 +132,7 @@ kubectl apply -k tiered-app/50-namespace-app/linkerd
 
 ## exec into sleep client and curl tiered-app
 ```bash
-kubectl exec -it deploy/sleep -n client sh
+kubectl exec -it deploy/sleep -n client -c sleep sh
 
 curl http://tier-1-app-a.ns-1.svc.cluster.local:8080
 ```
