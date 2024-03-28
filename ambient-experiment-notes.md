@@ -25,28 +25,9 @@ helm upgrade --install istio-cni istio/cni \
 -n kube-system \
 --version=1.21.0 \
 -f -<<EOF
+profile: ambient
+# uncomment below if using GKE
 cni:
-  enabled: true
-  namespace: kube-system
-  ## Configuration log level of istio-cni binary
-  ## by default istio-cni send all logs to UDS server
-  ## if want to see them you need change global.logging.level with cni:debug
-  logLevel: info  
-  ## Allow the istio-cni container to run in privileged mode, needed for some platforms (e.g. OpenShift)
-  privileged: true  
-  ## Deploy the config files as plugin chain (value "true") or as standalone files in the conf dir (value "false")?
-  ## Some k8s flavors (e.g. OpenShift) do not support the chain approach, set to false if this is the case
-  chained: true
-  ## Configure ambient settings
-  ambient:
-    ## If enabled, ambient redirection will be enabled
-    enabled: true  
-  ## Default excludes istio-system; its actually fine to redirect there since we opt-out istiod, ztunnel, and istio-cni
-  excludeNamespaces:
-  - kube-system
-  - istio-system
-  
-  #### GKE SPECIFIC
   cniBinDir: /home/kubernetes/bin
 EOF
 ```
@@ -57,33 +38,7 @@ helm upgrade --install istiod istio/istiod \
 -n istio-system \
 --version=1.21.0 \
 -f -<<EOF
-#### Discovery Settings
-pilot:
-  env:
-    ## Setup more secure default that is off in 'default' only for backwards compatibility
-    VERIFY_CERTIFICATE_AT_CLIENT: "true"
-    ENABLE_AUTO_SNI: "true"
-
-    PILOT_ENABLE_HBONE: "true"
-    CA_TRUSTED_NODE_ACCOUNTS: "istio-system/ztunnel,kube-system/ztunnel"
-    PILOT_ENABLE_AMBIENT_CONTROLLERS: "true"
-
-## ProxyConfig settings
-meshConfig:
-  defaultConfig:
-    proxyMetadata:
-      ISTIO_META_ENABLE_HBONE: "true"
-
-## Telemetry handled with Telemetry API only
-telemetry:
-  enabled: false
-  v2:
-    enabled: false
-
-## keep in sync with settings used when installing the Istio CNI chart
-istio_cni:
-  enabled: true
-  chained: true
+profile: ambient
 EOF
 ```
 
