@@ -7,8 +7,8 @@ Set the following variables for cluster name, zone, machine type, number of node
 GKE_CLUSTER_NAME="gke-istio-sidecar-1"
 GKE_CLUSTER_ZONE="us-west4-b"
 MAIN_MACHINE_TYPE="n2-standard-8"
-MAIN_NUM_NODES=""
-GKE_PROJECT=""
+MAIN_NUM_NODES="5"
+GKE_PROJECT="field-engineering-us"
 CLUSTER_VERSION="1.28.3-gke.1118000"
 ```
 
@@ -35,7 +35,7 @@ Set the following node pool variables for autoscaling, node labels, and taints
 ```
 GKE_NODE_POOL_NAME="gke-istio-sidecar-1-lg-spot-8cpu"
 POOL_MACHINE_TYPE="n2-standard-8"
-POOL_NUM_NODES="5"
+POOL_NUM_NODES="1"
 POOL_MIN_NODES="1"
 POOL_MAX_NODES="6"
 POOL_NODE_TAINTS="cloud.google.com/node="loadgen":NoSchedule"

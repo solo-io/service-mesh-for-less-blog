@@ -1,7 +1,7 @@
 apiVersion: builtin
 kind: AnnotationsTransformer
 metadata:
-  name: annotations-transformer
+  name: hold-proxy-annotations-transformer
 annotations:
   proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
 fieldSpecs:
