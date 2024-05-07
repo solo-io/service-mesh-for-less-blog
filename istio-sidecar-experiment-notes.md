@@ -8,14 +8,14 @@ helm repo update
 
 ## install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-beta.0 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-beta.1 --create-namespace
 ```
 
 ## install istiod
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 meshConfig:
   accessLogFile: /dev/stdout
@@ -34,7 +34,7 @@ EOF
 ```
 helm upgrade --install istio-ingress istio/gateway \
 -n istio-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 replicaCount: 1
  

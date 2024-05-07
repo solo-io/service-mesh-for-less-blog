@@ -8,7 +8,7 @@ helm repo update
 
 ## install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-beta.0 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-beta.1 --create-namespace
 ```
 
 ## install Kubernetes Gateway CRDs
@@ -23,7 +23,7 @@ kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
 ```bash
 helm upgrade --install istio-cni istio/cni \
 -n kube-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 profile: ambient
 # uncomment below if using GKE
@@ -36,7 +36,7 @@ EOF
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 profile: ambient
 EOF
@@ -48,24 +48,16 @@ For GKE, ztunnel is expected to be deployed in `kube-system`
 ```bash
 helm upgrade --install ztunnel istio/ztunnel \
 -n kube-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 hub: docker.io/istio
-tag: 1.22.0-beta.0
+tag: 1.22.0-beta.1
 resources:
   requests:
       cpu: 500m
       memory: 2048Mi
 istioNamespace: istio-system
-# Additional volumeMounts to the ztunnel container
-volumeMounts:
-  - name: tmp
-    mountPath: /tmp
-# Additional volumes to the ztunnel pod
-volumes:
-  - name: tmp
-    emptyDir:
-      medium: Memory
+logLevel: error
 EOF
 ```
 
@@ -73,7 +65,7 @@ EOF
 ```
 helm upgrade --install istio-ingress istio/gateway \
 -n istio-system \
---version=1.22.0-beta.0 \
+--version=1.22.0-beta.1 \
 -f -<<EOF
 replicaCount: 1
  
@@ -97,7 +89,7 @@ EOF
 ```
 
 
-# Configure an App
+# Configure an App and validate mTLS working
 
 ## deploy client into ambient mesh
 ```bash
@@ -109,11 +101,16 @@ kubectl apply -k client/ambient
 kubectl apply -k httpbin/ambient
 ```
 
-## exec into sleep client and curl httpbin /get endpoint to verify mTLS
+## exec into sleep client and curl httpbin
 ```bash
 kubectl exec -it deploy/sleep -n client -c sleep sh
 
 curl httpbin.httpbin.svc.cluster.local:8000/get
+```
+
+## watch logs of ztunnel for traffic interception
+```bash
+kubectl logs -n kube-system ds/ztunnel -f
 ```
 
 ## remove httpbin
