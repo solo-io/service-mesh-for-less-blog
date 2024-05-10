@@ -8,7 +8,7 @@ helm repo update
 
 ## install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-beta.1 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0-rc.0 --create-namespace
 ```
 
 ## install Kubernetes Gateway CRDs
@@ -23,7 +23,7 @@ kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
 ```bash
 helm upgrade --install istio-cni istio/cni \
 -n kube-system \
---version=1.22.0-beta.1 \
+--version=1.22.0-rc.0 \
 -f -<<EOF
 profile: ambient
 # uncomment below if using GKE
@@ -36,7 +36,7 @@ EOF
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.22.0-beta.1 \
+--version=1.22.0-rc.0 \
 -f -<<EOF
 profile: ambient
 EOF
@@ -48,10 +48,10 @@ For GKE, ztunnel is expected to be deployed in `kube-system`
 ```bash
 helm upgrade --install ztunnel istio/ztunnel \
 -n kube-system \
---version=1.22.0-beta.1 \
+--version=1.22.0-rc.0 \
 -f -<<EOF
 hub: docker.io/istio
-tag: 1.22.0-beta.1
+tag: 1.22.0-rc.0
 resources:
   requests:
       cpu: 500m
@@ -65,7 +65,7 @@ EOF
 ```
 helm upgrade --install istio-ingress istio/gateway \
 -n istio-system \
---version=1.22.0-beta.1 \
+--version=1.22.0-rc.0 \
 -f -<<EOF
 replicaCount: 1
  
