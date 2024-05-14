@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
 - ../base
 #- l4-policy
-#- l7-policy
 #- waypoints
 
 # when using ambient uncomment below
