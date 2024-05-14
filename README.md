@@ -338,7 +338,6 @@ spec:
  - from:
    - source:
        principals:
-       - cluster.local/ns/client/sa/sleep
        - cluster.local/ns/ns-1/sa/tier-1-app-a
        # ...
        - cluster.local/ns/ns-50/sa/tier-1-app-a
