@@ -8,7 +8,7 @@ GKE_CLUSTER_NAME="gke-istio-sidecar-1"
 GKE_CLUSTER_ZONE="us-west4-b"
 MAIN_MACHINE_TYPE="n2-standard-8"
 MAIN_NUM_NODES="5"
-GKE_PROJECT="field-engineering-us"
+GKE_PROJECT=""
 CLUSTER_VERSION="1.28.3-gke.1118000"
 ```
 
