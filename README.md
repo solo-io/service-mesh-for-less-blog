@@ -297,6 +297,93 @@ Status Codes  [code:count]                      200:270000
 
 From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
 
+## Istio Ambient Mode mTLS + L4 mutual auth
+
+In addition to providing mTLS with minimal latency, let's take it a step further and explore performance when enabling mutual authentication using an AuthorizationPolicy resource.
+
+Here is an example policy that restricts access to `tier-1-app-a` to the sleep and loadgenerator clients in `ns-1` through `ns-50`
+```bash
+kind: AuthorizationPolicy
+metadata:
+ name: tier-1-app-a-viewer
+ namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     app: tier-1-app-a
+ action: ALLOW
+ rules:
+ - from:
+   - source:
+       principals:
+       - cluster.local/ns/client/sa/sleep
+       - cluster.local/ns/ns-1/sa/vegeta
+       # ...
+       - cluster.local/ns/ns-50/sa/vegeta
+```
+
+And here is an example policy that restricts access to `tier-2-app-a` to `tier-1-app-a` in `ns-1` through `ns-50`
+```bash
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: tier-2-app-a-viewer
+ namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     app: tier-2-app-a
+ action: ALLOW
+ rules:
+ - from:
+   - source:
+       principals:
+       - cluster.local/ns/client/sa/sleep
+       - cluster.local/ns/ns-1/sa/tier-1-app-a
+       # ...
+       - cluster.local/ns/ns-50/sa/tier-1-app-a
+```
+
+Running the same test as previously, but with AuthorizationPolicy enabled for our services, we produced results similar to the following:
+
+```bash
+Namespace: ns-1
+Pod: vegeta-ns-1-dc87d5c9b-m96rm
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.721ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.969ms, 2.436ms, 2.407ms, 2.624ms, 2.731ms, 3.039ms, 49.539ms
+Bytes In      [total, mean]                     735319943, 2723.41
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+
+Namespace: ns-25
+Pod: vegeta-ns-25-679c7c495d-b8vmn
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 3.202ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.111ms, 2.622ms, 2.591ms, 2.826ms, 2.943ms, 3.283ms, 22.658ms
+Bytes In      [total, mean]                     737483529, 2731.42
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+
+Namespace: ns-50
+Pod: vegeta-ns-50-858b9dbc6b-vnlsl
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.847ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.127ms, 2.652ms, 2.616ms, 2.886ms, 3.019ms, 3.405ms, 21.837ms
+Bytes In      [total, mean]                     738562702, 2735.42
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+```
+
+### Results across three 10 minute runs:
+- lowest P50 latency `2.4ms`
+- highest P99 latency `3.9ms`
+
+From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.8ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing both mTLS and mutual authentication for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
+
 # Conclusion
 
 In this blog we explored three main value propositions for Istio Ambient Mode
@@ -316,7 +403,8 @@ From a baseline performance of `1.5ms` - `2.1ms`
 
 - LinkerD: adds `2.6ms` - `4.4ms` of round trip latency for L4/L7 mTLS + L7 features
 - Istio Sidecar Mode: adds `4.5ms` - `8.7ms` of round trip latency for  L4/L7 mTLS + L7 features
-- Istio Ambient Mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS
+- Istio Ambient Mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS only
+- Istio Ambient Mode: adds `0.9ms` - `1.8ms` of round trip latency for L4 mTLS with mutual authentication enforced
 
 ![percentage-improvement-equation](.images/percentage-improvement-equation-1.png)
 
@@ -327,7 +415,7 @@ Maximum Latency Improvement:
 
 ![max-percentage-improvement](.images/percentage-improvement-equation-2.png)
 
-As shown above, the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%**!
+As shown above, depending on the use-case the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%**!
 
 Adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from improved resource utilization while maintaining or even enhancing application performance. It is clear here that we are benefitting while doing more for less!
 
