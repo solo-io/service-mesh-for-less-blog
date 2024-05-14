@@ -300,11 +300,17 @@ From these results, we can derive that the addition of Ambient mode to our test 
 # Conclusion
 
 In this blog we explored three main value propositions for Istio Ambient Mode
-- Simplify operations of the service mesh
-- Reduce infrastructure costs
-- Improved resource utilization and application performance
+- Simplified Operations: Eliminating sidecars reduces the operational burden on Platform and Application teams, particularly during proxy upgrades.
+- Reduced Infrastructure Costs: By adopting a sidecarless architecture, the resource costs are scaled with the platform rather than each application, leading to significant savings.
+- Improved Performance: Ambient mode offers improved resource utilization and superior latency performance compared to traditional sidecar and alternative service mesh approaches.
 
-In our hypothetical scenario detailed in this experiment, the adoption of Ambient mode fulfills the mTLS mandate that was implemented by the Security team without imposing any additional cost to the Application team. From a performance perspective, we can see that the additional latency cost incurred by utilizing a mesh is as follows for our sample 3-tier application deployed across 50 namespaces with 50 loadgenerator clients pushing a cluster-wide total of 22.5K RPS (450RPS per client)
+In our hypothetical scenario, the adoption of Ambient mode fulfills the mTLS mandate from the Security team without imposing significant additional costs on the Application team. From a performance perspective, the additional latency incurred by utilizing a mesh is minimal
+
+From a baseline monthly cost of $5475 for our 50 namespace workload
+
+- LinkerD and Istio Sidecar can add up to **36%** increase in infrastructure costs
+- L4 Istio Ambient incurs additional cost of **5%** but is still much lower than the sidecar approach
+- Istio Ambient with Waypoint Proxy (configured to be highly available) for the full L4/L7 feature set is much lower at **+15%** increase in cost
 
 From a baseline performance of `1.5ms` - `2.1ms`
 
@@ -321,8 +327,8 @@ Maximum Latency Improvement:
 
 ![max-percentage-improvement](.images/percentage-improvement-equation-2.png)
 
-As you can see, the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%**!
+As shown above, the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%**!
 
-Furthermore, adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from the improved resource utilization while maintaining or even improving application performance. It is clear here that we are benefitting while doing more for less!
+Adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from improved resource utilization while maintaining or even enhancing application performance. It is clear here that we are benefitting while doing more for less!
 
-As Solo.io is a co-founder of the Istio ambient sidecar-less architecture and leads the development upstream in the Istio community, we are uniquely positioned to help our customers adopt this architecture for production security and compliance requirements. [Please reach out to us to talk with an expert.](https://www.solo.io/company/contact/)
+As a co-founder and leader in the development of the Istio Ambient sidecarless architecture, Solo.io is uniquely positioned to help our customers adopt this architecture for production-grade security and compliance requirements. [Please reach out to us to talk with an expert.](https://www.solo.io/company/contact/)
