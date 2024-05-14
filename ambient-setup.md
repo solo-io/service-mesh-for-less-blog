@@ -32,6 +32,11 @@ cni:
 EOF
 ```
 
+Wait for rollout to complete
+```bash
+kubectl rollout status ds/istio-cni-node -n kube-system
+```
+
 ## install istiod
 ```bash
 helm upgrade --install istiod istio/istiod \
@@ -40,6 +45,11 @@ helm upgrade --install istiod istio/istiod \
 -f -<<EOF
 profile: ambient
 EOF
+```
+
+Wait for rollout to complete
+```bash
+kubectl rollout status deploy/istiod -n istio-system
 ```
 
 ## install ztunnel
@@ -61,33 +71,10 @@ logLevel: error
 EOF
 ```
 
-## install ingressgateway (optional)
+Wait for rollout to complete
+```bash
+kubectl rollout status ds/ztunnel -n kube-system
 ```
-helm upgrade --install istio-ingress istio/gateway \
--n istio-system \
---version=1.22.0 \
--f -<<EOF
-replicaCount: 1
- 
-service:
-  ## Type of service. Set to "None" to disable the service entirely
-  type: LoadBalancer
-  ports:
-  - name: http2
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  - name: https
-    port: 443
-    protocol: TCP
-    targetPort: 443
- 
-## Labels to apply to all resources
-labels:
-  istio: ingressgateway
-EOF
-```
-
 
 # Configure an App and validate mTLS working
 
