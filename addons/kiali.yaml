@@ -6,12 +6,12 @@ metadata:
   name: kiali
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 ...
@@ -23,21 +23,30 @@ metadata:
   name: kiali
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 data:
   config.yaml: |
+    additional_display_details:
+    - annotation: kiali.io/api-spec
+      icon_annotation: kiali.io/api-type
+      title: API Documentation
     auth:
       openid: {}
       openshift:
         client_id_prefix: kiali
       strategy: anonymous
+    clustering:
+      autodetect_secrets:
+        enabled: true
+        label: kiali.io/multiCluster=true
+      clusters: []
     deployment:
       accessible_namespaces:
       - '**'
@@ -50,13 +59,13 @@ data:
       custom_secrets: []
       host_aliases: []
       hpa:
-        api_version: autoscaling/v2beta2
+        api_version: autoscaling/v2
         spec: {}
       image_digest: ""
       image_name: quay.io/kiali/kiali
       image_pull_policy: Always
       image_pull_secrets: []
-      image_version: v1.76
+      image_version: v1.82
       ingress:
         additional_labels: {}
         class_name: nginx
@@ -87,13 +96,15 @@ data:
       service_annotations: {}
       service_type: ""
       tolerations: []
-      version_label: v1.76.0
+      version_label: v1.82.0
       view_only_mode: false
     external_services:
       custom_dashboards:
         enabled: true
       istio:
         root_namespace: istio-system
+      tracing:
+        enabled: false
     identity:
       cert_file: ""
       private_key_file: ""
@@ -104,11 +115,6 @@ data:
         secrets:
         - cacerts
         - istio-ca-secret
-      clustering:
-        autodetect_secrets:
-          enabled: true
-          label: kiali.io/multiCluster=true
-        clusters: []
       disabled_features: []
       validations:
         ignore:
@@ -116,8 +122,10 @@ data:
     login_token:
       signing_key: CHANGEME00000000
     server:
-      metrics_enabled: true
-      metrics_port: 9090
+      observability:
+        metrics:
+          enabled: true
+          port: 9090
       port: 20001
       web_root: /kiali
 ...
@@ -128,12 +136,12 @@ kind: ClusterRole
 metadata:
   name: kiali-viewer
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 rules:
@@ -221,12 +229,12 @@ kind: ClusterRole
 metadata:
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 rules:
@@ -321,12 +329,12 @@ kind: ClusterRoleBinding
 metadata:
   name: kiali
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 roleRef:
@@ -346,12 +354,12 @@ metadata:
   name: kiali-controlplane
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 rules:
@@ -374,12 +382,12 @@ metadata:
   name: kiali-controlplane
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 roleRef:
@@ -399,12 +407,12 @@ metadata:
   name: kiali
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
   annotations:
@@ -430,12 +438,12 @@ metadata:
   name: kiali
   namespace: istio-system
   labels:
-    helm.sh/chart: kiali-server-1.76.0
+    helm.sh/chart: kiali-server-1.82.0
     app: kiali
     app.kubernetes.io/name: kiali
     app.kubernetes.io/instance: kiali
-    version: "v1.76.0"
-    app.kubernetes.io/version: "v1.76.0"
+    version: "v1.82.0"
+    app.kubernetes.io/version: "v1.82.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: "kiali"
 spec:
@@ -453,24 +461,24 @@ spec:
     metadata:
       name: kiali
       labels:
-        helm.sh/chart: kiali-server-1.76.0
+        helm.sh/chart: kiali-server-1.82.0
         app: kiali
         app.kubernetes.io/name: kiali
         app.kubernetes.io/instance: kiali
-        version: "v1.76.0"
-        app.kubernetes.io/version: "v1.76.0"
+        version: "v1.82.0"
+        app.kubernetes.io/version: "v1.82.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: "kiali"
         sidecar.istio.io/inject: "false"
       annotations:
-        checksum/config: aebd819b94172ef9b148702b7bb438ac35bd1eb284bbb9b13769d8576374fbda
+        checksum/config: 19405f971010f37081fa485f6c53616dfdf97d1d372e4ac9e09434cf0e71f02d
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         kiali.io/dashboards: go,kiali
     spec:
       serviceAccountName: kiali
       containers:
-      - image: "quay.io/kiali/kiali:v1.76"
+      - image: "quay.io/kiali/kiali:v1.82"
         imagePullPolicy: Always
         name: kiali
         command:
