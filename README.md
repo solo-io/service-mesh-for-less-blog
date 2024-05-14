@@ -387,9 +387,9 @@ From these results, we can derive that the addition of Ambient mode to our test 
 # Conclusion
 
 In this blog we explored three main value propositions for Istio Ambient Mode
-- Simplified Operations: Eliminating sidecars reduces the operational burden on Platform and Application teams, particularly during proxy upgrades.
-- Reduced Infrastructure Costs: By adopting a sidecarless architecture, the resource costs are scaled with the platform rather than each application, leading to significant savings.
-- Improved Performance: Ambient mode offers improved resource utilization and superior latency performance compared to traditional sidecar and alternative service mesh approaches.
+- **Simplified Operations**: Eliminating sidecars reduces the operational burden on Platform and Application teams, particularly during proxy upgrades.
+- **Reduced Infrastructure Costs**: By adopting a sidecarless architecture, the resource costs are scaled with the platform rather than each application, leading to significant savings.
+- **Improved Performance**: Ambient mode offers improved resource utilization and superior latency performance compared to traditional sidecar and alternative service mesh approaches.
 
 In our hypothetical scenario, the adoption of Ambient mode fulfills the mTLS mandate from the Security team without imposing significant additional costs on the Application team. From a performance perspective, the additional latency incurred by utilizing a mesh is minimal
 
