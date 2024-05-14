@@ -41,9 +41,9 @@ spec:
         - name: PREFIX_PATH
           value: ns-2
         - name: REQUESTS_PER_SECOND
-          value: "600"
+          value: "450"
         - name: DURATION
-          value: "600s"
+          value: "10s"
         - name: CONNECTIONS
           value: "100"
         - name: MAX_CONNECTIONS

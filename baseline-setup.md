@@ -88,27 +88,3 @@ kubectl delete -k loadgenerators/50-loadgenerators
 kubectl delete -k tiered-app/50-namespace-app/base
 kubectl delete -k client/base
 ```
-
-## 50 namespace app notes (8cpu nodes)
-- 50 namespace isolated applications
-- 3-tier application, 4 deployments per namespace, 1 replicas per deployment 
-  - A > B1,B2 > C
-  - CPU requests: 700m // CPU limits: 700m (guaranteed QoS)
-  - MEM requests: 500Mi // MEM limits: 500Mi (guaranteed QoS)
-- Application Latency expectations:
-  - average latency < 40ms
-  - max latency < 200ms
-- Expected CPU utilization tuned to around 30-40% (visualized in GKE Observability)
-
-Total application baseline requirements are 140 CPU cores and 100 GB memory
-
-- Load generator per namespace targeting tier 1 application level
-  - deployed to separate loadgen node pool
-  - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
-  - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
-
-Total load generator baseline requirements are 25 CPU cores and 15 GB memory
-
-#### Total expected baseline (not including default GKE addons)
-Total expected baseline requirements: 165 CPU Cores and 115GB memory

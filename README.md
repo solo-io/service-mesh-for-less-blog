@@ -34,7 +34,7 @@ Ambient mode enables us to meet the mTLS requirement with a model that is less c
 
 # Let's look at some numbers
 
-Lets take the following application for our large scale application experiment:
+Lets take the following workload for our large scale application experiment:
 
 Application Details:
 - 50 namespace isolated applications
@@ -44,20 +44,11 @@ Application Details:
     - CPU requests: 700m // CPU limits: 700m (guaranteed QoS)
     - MEM requests: 500Mi // MEM limits: 500Mi (guaranteed QoS)
 
-Load Generator Details:
-- Load generator per namespace targeting tier 1 application level
-  - deployed to separate loadgen node pool to ensure unbiased performance measurements by preventing resource contention and interference 
-  - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - Each loadgen client is configured at 450 RPS for a total of *22.5K RPS cluster-wide*
-  - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
-  - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
-
 Baseline Resource Requirements:
 When calculating the baseline resource requirements without service mesh enabled:
 - Total application baseline requirements are 140 CPU cores and 100 GB memory
-- Total load generator baseline requirements are 25 CPU cores and 15 GB memory
 
-Total expected baseline requirements: 165 CPU Cores and 115 GB memory
+Total expected baseline requirements: 140 CPU Cores and 100 GB memory. Note that this excludes the load generator clients in this calculation as we are focusing on just the baseline application footprint for this exercise
 
 A high level architecture looks like this:
 
@@ -69,7 +60,7 @@ A high level architecture looks like this:
 
 In an ideal world, where everything is perfectly scheduled like an expert tetris player, our capacity planning exercise would be a rather simple calculation
 
-![baseline-requirements-1](.images/baseline-requirements-1.png)
+![baseline-requirements-2](.images/baseline-requirements-2.png)
 
 Source: using the [Google Cloud Pricing Calculator](https://cloud.google.com/products/calculator?hl=en)
 
@@ -79,9 +70,9 @@ Source: using the [Google Cloud Pricing Calculator](https://cloud.google.com/pro
 
 In reality, Kubernetes scheduling is not perfect, and inefficiencies in bin packing workloads will result in additional resources consumed (nodes created) so that all workloads can be scheduled. The following table shows the actual results of deploying the example application described in our test environment:
 
-![bin-packing-2](.images/bin-packing-2.png)
+![bin-packing-3](.images/bin-packing-3.png)
 
-The results mirror the goals of the Ambient project in both simplifying operations of the service mesh (no sidecars!) as well as reducing infrastructure costs (no additional cost to fulfill mTLS requirement). We also see an added benefit where if we decide to incrementally adopt the full L7 feature set by adopting waypoint proxies, the cost would be +18% from baseline using `ztunnel` + waypoint proxies vs. the traditional sidecar approach at +36%
+The results mirror the goals of the Ambient project in both simplifying operations of the service mesh (no sidecars!) as well as reducing infrastructure costs (no additional cost to fulfill mTLS requirement). We also see an added benefit where if we decide to incrementally adopt the full L7 feature set by adopting waypoint proxies, the cost would be **+15%** from baseline using `ztunnel` + waypoint proxies vs. the traditional sidecar approach at **+36%**
 
 # Simplifying Operations
 
@@ -106,9 +97,8 @@ Taking the example app above, we ran the following experiment to validate that A
 First we set some baseline performance requirements for our 3-tier application workload that is deployed across 50 namespaces. 
 
 Our application latency expectations:
-- Max P50 latency < 20ms
-- Max P99 latency < 30ms
-- Desired CPU utilization of the cluster greater than 25% (visualized in GKE Observability)
+- Max P50 latency < 5ms
+- Max P99 latency < 15ms
 
 We configured a Vegeta loadgenerator client per-namespace with a guaranteed QoS by setting resource requests/limits to `500m` CPU and `300Mi` MEM for this experiment:
 
@@ -156,15 +146,11 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across several 10 minute runs:
+### Results across three 10 minute runs:
 - lowest P50 latency ~`1.5ms`
 - highest P99 latency ~`2.1ms`
 
 We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`. Full results for the baseline tests can be seen in the `/experiment-data` directory
-
-Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
-![50-app-baseline-gke-observability.png](.images/50-app-baseline-gke-observability.png)
-
 
 ## LinkerD testing with v1.16.11
 
@@ -210,70 +196,62 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000 
 ```
 
-### Results across several 10 minute runs:
+### Results across three 10 minute runs:
 - lowest P50 latency `4.1ms`
 - highest P99 latency `6.5ms`
 
-From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
 
-Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
-
-![50-app-linkerd-gke-observability.png](.images/50-app-linkerd-gke-observability.png)
-
-## Istio Sidecar testing with v1.21.0
+## Istio Sidecar testing with v1.22.0
 
 Next we ran the same test using the traditional Istio sidecar mode, keeping the same default proxy reservation requests of `100m` CPU and `128Mi` MEM.
 
 A run of the test produced results similar to the following:
 ```bash
 Namespace: ns-1
-Pod: vegeta-ns-1-7fdb65c5d4-484c5
+Pod: vegeta-ns-1-dc87d5c9b-zgdwz
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 6.842ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  5.287ms, 7.031ms, 6.848ms, 7.974ms, 8.525ms, 10.049ms, 98.891ms
-Bytes In      [total, mean]                     819315334, 3034.50
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.721ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.9ms, 6.263ms, 6.189ms, 6.769ms, 7.056ms, 8.535ms, 74.043ms
+Bytes In      [total, mean]                     820117029, 3037.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000 
+Status Codes  [code:count]                      200:270000  
 
 Namespace: ns-25
-Pod: vegeta-ns-25-7c9b875bc4-8q9gz
+Pod: vegeta-ns-25-679c7c495d-9lsmp
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 7.786ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  5.448ms, 7.837ms, 7.55ms, 9.383ms, 10.235ms, 12.179ms, 73.324ms
-Bytes In      [total, mean]                     821216964, 3041.54
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.017ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.865ms, 6.366ms, 6.268ms, 6.946ms, 7.287ms, 8.742ms, 105.554ms
+Bytes In      [total, mean]                     822010927, 3044.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000 
+Status Codes  [code:count]                      200:270000  
 
 Namespace: ns-50
-Pod: vegeta-ns-50-78d5d67cfd-6spmz
+Pod: vegeta-ns-50-858b9dbc6b-8j7s4
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 6.058ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  5.178ms, 6.716ms, 6.576ms, 7.475ms, 7.977ms, 9.509ms, 65.94ms
-Bytes In      [total, mean]                     821474341, 3042.50
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.312ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.13ms, 7.069ms, 6.842ms, 8.055ms, 8.754ms, 10.827ms, 94.777ms
+Bytes In      [total, mean]                     821480774, 3042.52
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000 
+Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across several 10 minute runs:
-- lowest P50 latency `6.3ms`
-- highest P99 latency `14.3ms`
+### Results across three 10 minute runs:
+- lowest P50 latency `6.1ms`
+- highest P99 latency `10.8ms`
 
-From these results, we can derive that the addition of LinkerD sidecars to our test application adds around `4.8ms - 12.2ms` of latency to our application round-trip for our 3-tier service. Full results for the sidecar tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of sidecars to our test application adds around `4.5ms - 8.7ms` of latency to our application round-trip for our 3-tier service. Full results for the sidecar tests can be seen in the `/experiment-data` directory
 
-Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
-
-![50-app-sidecar-gke-observability.png](.images/50-app-sidecar-gke-observability.png)
-
-## Istio Ambient Mode testing with v1.21.0
+## Istio Ambient Mode testing with v1.22.0
 
 With Ambient, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
 - Deploy the applications
@@ -283,45 +261,41 @@ Running the same test that we did previously, we produced results similar to the
 
 ```bash
 Namespace: ns-1
-Pod: vegeta-ns-1-7fdb65c5d4-fthdc
+Pod: vegeta-ns-1-dc87d5c9b-t2bhc
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.503ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.018ms, 2.536ms, 2.489ms, 2.718ms, 2.826ms, 3.165ms, 57.766ms
-Bytes In      [total, mean]                     737478926, 2731.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.189ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.949ms, 2.423ms, 2.393ms, 2.609ms, 2.717ms, 3.038ms, 26.804ms
+Bytes In      [total, mean]                     735854589, 2725.39
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 
 Namespace: ns-25
-Pod: vegeta-ns-25-7c9b875bc4-8rglb
+Pod: vegeta-ns-25-679c7c495d-lcq5r
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.722ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.122ms, 2.669ms, 2.63ms, 2.911ms, 3.029ms, 3.396ms, 47.424ms
-Bytes In      [total, mean]                     740181069, 2741.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000 
-
-Namespace: ns-30
-Pod: vegeta-ns-30-7f5787c66d-q2w9g
-Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.693ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.032ms, 2.587ms, 2.541ms, 2.806ms, 2.923ms, 3.295ms, 42.54ms
-Bytes In      [total, mean]                     740178921, 2741.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.254ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.94ms, 2.461ms, 2.426ms, 2.702ms, 2.815ms, 3.109ms, 28.476ms
+Bytes In      [total, mean]                     738019591, 2733.41
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
+
+Namespace: ns-50
+Pod: vegeta-ns-50-858b9dbc6b-blhgs
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 2.357ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.951ms, 2.479ms, 2.439ms, 2.722ms, 2.855ms, 3.261ms, 20.191ms
+Bytes In      [total, mean]                     738020991, 2733.41
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000   
 ```
 
-### Results across several 10 minute runs:
+### Results across three 10 minute runs:
 - lowest P50 latency `2.4ms`
-- highest P99 latency `4.1ms`
+- highest P99 latency `3.3ms`
 
-From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
-
-Below we can see the 30 minute history cluster CPU dashboard for this test run as shown in the GKE console
-
-![50-app-ambient-gke-l4-observability.png](.images/50-app-ambient-gke-l4-observability.png)
+From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
 
 # Conclusion
 
@@ -332,18 +306,23 @@ In this blog we explored three main value propositions for Istio Ambient Mode
 
 In our hypothetical scenario detailed in this experiment, the adoption of Ambient mode fulfills the mTLS mandate that was implemented by the Security team without imposing any additional cost to the Application team. From a performance perspective, we can see that the additional latency cost incurred by utilizing a mesh is as follows for our sample 3-tier application deployed across 50 namespaces with 50 loadgenerator clients pushing a cluster-wide total of 22.5K RPS (450RPS per client)
 
-- LinkerD: `+2.6ms - 4.4ms`
-- Istio Sidecar Mode: `+4.8ms - 12.2ms`
-- Istio Ambient Mode: `+0.9ms - 2ms`
+From a baseline performance of `1.5ms` - `2.1ms`
 
-As you can see, the introduction of Ambient mode can improve our expected latency performance by up to *65% faster for p50* and *55% faster for p99* compared to traditional sidecar based architectures!
+- LinkerD: adds `2.6ms` - `4.4ms` of round trip latency for L4/L7 mTLS + L7 features
+- Istio Sidecar Mode: adds `4.5ms` - `8.7ms` of round trip latency for  L4/L7 mTLS + L7 features
+- Istio Ambient Mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS
+
+![percentage-improvement-equation](.images/percentage-improvement-equation-1.png)
+
+Maximum Latency Improvement:
+
+- Sidecar mode maximum latency: 10.8ms
+- Ambient mode maximum latency: 3.3ms
+
+![max-percentage-improvement](.images/percentage-improvement-equation-2.png)
+
+As you can see, the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%**!
 
 Furthermore, adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from the improved resource utilization while maintaining or even improving application performance. It is clear here that we are benefitting while doing more for less!
 
 As Solo.io is a co-founder of the Istio ambient sidecar-less architecture and leads the development upstream in the Istio community, we are uniquely positioned to help our customers adopt this architecture for production security and compliance requirements. [Please reach out to us to talk with an expert.](https://www.solo.io/company/contact/)
-
-
-
-
-
-

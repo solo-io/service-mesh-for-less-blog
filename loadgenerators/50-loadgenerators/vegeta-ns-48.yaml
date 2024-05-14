@@ -39,7 +39,7 @@ spec:
         - name: APP_URL
           value: "http://tier-1-app-a.ns-48.svc.cluster.local:8080"
         - name: REQUESTS_PER_SECOND
-          value: "600"
+          value: "450"
         - name: DURATION
           value: "600s"
         - name: CONNECTIONS

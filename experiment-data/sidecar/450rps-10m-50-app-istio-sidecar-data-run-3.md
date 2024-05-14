@@ -1,649 +1,649 @@
 ```
 Namespace: ns-1
-Pod: vegeta-ns-1-7fdb65c5d4-972qj
+Pod: vegeta-ns-1-dc87d5c9b-zgdwz
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.815ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.103ms, 2.716ms, 2.673ms, 2.955ms, 3.092ms, 3.47ms, 58.241ms
-Bytes In      [total, mean]                     736667807, 2728.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.881ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.885ms, 6.322ms, 6.241ms, 6.871ms, 7.197ms, 8.663ms, 59.949ms
+Bytes In      [total, mean]                     820120901, 3037.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-2
-Pod: vegeta-ns-2-66b4b87b69-x269q
+Pod: vegeta-ns-2-646c6bb749-728w4
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.932ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.075ms, 2.658ms, 2.613ms, 2.915ms, 3.048ms, 3.463ms, 60.287ms
-Bytes In      [total, mean]                     736935543, 2729.39
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.403ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.786ms, 6.413ms, 6.319ms, 6.923ms, 7.256ms, 8.957ms, 100.3ms
+Bytes In      [total, mean]                     820654716, 3039.46
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-3
-Pod: vegeta-ns-3-845b7b9f58-zrknc
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-3-78f5cf88c8-h2692
+Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.709ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.055ms, 2.593ms, 2.555ms, 2.814ms, 2.939ms, 3.271ms, 60.312ms
-Bytes In      [total, mean]                     737207235, 2730.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.755ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.952ms, 6.539ms, 6.418ms, 7.179ms, 7.648ms, 9.422ms, 59.647ms
+Bytes In      [total, mean]                     820662556, 3039.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-4
-Pod: vegeta-ns-4-b4bbb8cf-wvr4f
-Status Codes  [code:count]                      200:270000  
-Error Set:
-Requests      [total, rate, throughput]         270001, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.294ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.074ms, 2.656ms, 2.616ms, 2.899ms, 3.026ms, 3.383ms, 53.915ms
-Bytes In      [total, mean]                     736671948, 2728.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270001  
-Error Set:
-
-Namespace: ns-5
-Pod: vegeta-ns-5-585ff779f6-8cd57
+Pod: vegeta-ns-4-5569dbc979-b7q96
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.928ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.055ms, 2.562ms, 2.526ms, 2.787ms, 2.907ms, 3.219ms, 22.257ms
-Bytes In      [total, mean]                     736669954, 2728.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.503ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.769ms, 6.49ms, 6.407ms, 7.065ms, 7.44ms, 9.147ms, 61.321ms
+Bytes In      [total, mean]                     820396379, 3038.51
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+Error Set:
+
+Namespace: ns-5
+Pod: vegeta-ns-5-59b7c76844-vh4j4
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.802ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.046ms, 6.482ms, 6.374ms, 7.08ms, 7.501ms, 9.219ms, 49.506ms
+Bytes In      [total, mean]                     820657602, 3039.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-6
-Pod: vegeta-ns-6-7df79f7857-d95cw
+Pod: vegeta-ns-6-669dd574f7-gmstt
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.576ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.094ms, 2.676ms, 2.636ms, 2.931ms, 3.058ms, 3.442ms, 39.025ms
-Bytes In      [total, mean]                     737205939, 2730.39
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.795ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.947ms, 6.527ms, 6.397ms, 7.174ms, 7.62ms, 9.465ms, 103.546ms
+Bytes In      [total, mean]                     820391677, 3038.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-7
-Pod: vegeta-ns-7-579f96d6cd-8rf9f
+Pod: vegeta-ns-7-57745bdcbb-qwtbw
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.776ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.134ms, 2.701ms, 2.659ms, 2.967ms, 3.102ms, 3.538ms, 33.543ms
-Bytes In      [total, mean]                     737208462, 2730.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.732ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.829ms, 6.525ms, 6.419ms, 7.082ms, 7.448ms, 9.258ms, 102.58ms
+Bytes In      [total, mean]                     820126010, 3037.50
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-8
-Pod: vegeta-ns-8-6c5f797f8c-5w9g8
+Pod: vegeta-ns-8-7b746c7999-kglw5
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.913ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2ms, 2.608ms, 2.569ms, 2.855ms, 2.99ms, 3.335ms, 25.516ms
-Bytes In      [total, mean]                     736938576, 2729.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.944ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.893ms, 6.331ms, 6.253ms, 6.853ms, 7.171ms, 8.706ms, 67.136ms
+Bytes In      [total, mean]                     820389065, 3038.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-9
-Pod: vegeta-ns-9-84c8f68b56-wbbhm
+Pod: vegeta-ns-9-5947d55dd-tb2vx
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.486ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.083ms, 2.644ms, 2.605ms, 2.895ms, 3.02ms, 3.392ms, 52.518ms
-Bytes In      [total, mean]                     737209645, 2730.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.758ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.872ms, 6.33ms, 6.235ms, 6.906ms, 7.316ms, 8.922ms, 26.008ms
+Bytes In      [total, mean]                     820117232, 3037.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-10
-Pod: vegeta-ns-10-6764b748fd-qnhcx
+Pod: vegeta-ns-10-6c6d8ddd86-xzqdx
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.559ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.137ms, 2.759ms, 2.715ms, 3.028ms, 3.169ms, 3.597ms, 64.772ms
-Bytes In      [total, mean]                     738557785, 2735.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.651ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.858ms, 6.346ms, 6.257ms, 6.926ms, 7.292ms, 8.879ms, 43.58ms
+Bytes In      [total, mean]                     822550189, 3046.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-11
-Pod: vegeta-ns-11-55ddc589cc-fgprk
+Pod: vegeta-ns-11-7c77b48765-hmqgt
 Status Codes  [code:count]                      200:270000  
 Error Set:
-Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.618ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.172ms, 2.782ms, 2.738ms, 3.046ms, 3.185ms, 3.594ms, 58.264ms
-Bytes In      [total, mean]                     739099310, 2737.40
+Requests      [total, rate, throughput]         270001, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.402ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.976ms, 6.492ms, 6.357ms, 7.12ms, 7.597ms, 9.294ms, 100.125ms
+Bytes In      [total, mean]                     822820305, 3047.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000  
+Status Codes  [code:count]                      200:270001  
 Error Set:
 
 Namespace: ns-12
-Pod: vegeta-ns-12-7c88645888-cjvmg
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-12-86d854968-fh6rw
+Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.52ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.168ms, 2.744ms, 2.694ms, 3.011ms, 3.164ms, 3.627ms, 61.728ms
-Bytes In      [total, mean]                     739099574, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.203ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.932ms, 6.484ms, 6.377ms, 7.096ms, 7.49ms, 9.102ms, 56.193ms
+Bytes In      [total, mean]                     822016366, 3044.51
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-13
-Pod: vegeta-ns-13-6bfc97b695-fb49c
+Pod: vegeta-ns-13-c6bc94cb7-vlp9d
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.646ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.172ms, 2.786ms, 2.735ms, 3.066ms, 3.224ms, 3.717ms, 70.992ms
-Bytes In      [total, mean]                     739639135, 2739.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 8.102ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.12ms, 6.895ms, 6.713ms, 7.777ms, 8.435ms, 10.369ms, 32.328ms
+Bytes In      [total, mean]                     822011399, 3044.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-14
-Pod: vegeta-ns-14-56d65f7d66-9ktzt
+Pod: vegeta-ns-14-5886db6554-qxqkv
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.808ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.156ms, 2.729ms, 2.69ms, 2.976ms, 3.1ms, 3.471ms, 61.63ms
-Bytes In      [total, mean]                     738559019, 2735.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.983ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.916ms, 6.595ms, 6.48ms, 7.154ms, 7.567ms, 9.365ms, 100ms
+Bytes In      [total, mean]                     822829342, 3047.52
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-15
-Pod: vegeta-ns-15-768b97587c-69tsj
+Pod: vegeta-ns-15-645747bf77-zpw8k
 Status Codes  [code:count]                      200:270000  
 Error Set:
-Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.751ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.147ms, 2.759ms, 2.713ms, 3.027ms, 3.168ms, 3.614ms, 67.182ms
-Bytes In      [total, mean]                     739097239, 2737.40
+Requests      [total, rate, throughput]         270000, 450.00, 449.99
+Duration      [total, attack, wait]             10m0s, 10m0s, 8.95ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.953ms, 6.398ms, 6.31ms, 6.968ms, 7.308ms, 8.9ms, 77.115ms
+Bytes In      [total, mean]                     822824487, 3047.50
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-16
-Pod: vegeta-ns-16-7b9c6f5d8-wnrhk
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-16-79d5fc8f6d-t2vst
+Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3.272ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.109ms, 2.671ms, 2.633ms, 2.896ms, 3.017ms, 3.379ms, 59.312ms
-Bytes In      [total, mean]                     739371050, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.812ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.946ms, 6.706ms, 6.553ms, 7.439ms, 8.016ms, 9.933ms, 50.777ms
+Bytes In      [total, mean]                     822019391, 3044.52
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-17
-Pod: vegeta-ns-17-5bcffb5b67-4rqlp
-Status Codes  [code:count]                      200:270000  
-Error Set:
-Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.535ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.181ms, 2.776ms, 2.729ms, 3.041ms, 3.183ms, 3.592ms, 64.75ms
-Bytes In      [total, mean]                     739371340, 2738.41
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000  
-Error Set:
-
-Namespace: ns-18
-Pod: vegeta-ns-18-669547969d-j678m
+Pod: vegeta-ns-17-654dd49b59-v7vsq
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270001, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.82ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.17ms, 2.767ms, 2.717ms, 3.043ms, 3.188ms, 3.633ms, 63.683ms
-Bytes In      [total, mean]                     738833245, 2736.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.936ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.787ms, 6.293ms, 6.226ms, 6.794ms, 7.065ms, 8.535ms, 50.604ms
+Bytes In      [total, mean]                     822017863, 3044.50
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270001  
 Error Set:
 
-Namespace: ns-19
-Pod: vegeta-ns-19-c49957f6f-tj679
+Namespace: ns-18
+Pod: vegeta-ns-18-594fcd4cdb-fknxq
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.99ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.196ms, 2.867ms, 2.81ms, 3.172ms, 3.332ms, 3.873ms, 66.159ms
-Bytes In      [total, mean]                     739639455, 2739.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 8.708ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.776ms, 6.24ms, 6.177ms, 6.745ms, 7.012ms, 8.589ms, 51.767ms
+Bytes In      [total, mean]                     822820862, 3047.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
+Namespace: ns-19
+Pod: vegeta-ns-19-64f796f4fc-xgbn2
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270001, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.247ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.835ms, 6.442ms, 6.343ms, 6.986ms, 7.358ms, 9.074ms, 52.274ms
+Bytes In      [total, mean]                     822826364, 3047.49
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270001  
+Error Set:
+
 Namespace: ns-20
-Pod: vegeta-ns-20-78b5b9f589-rst72
+Pod: vegeta-ns-20-848f998f7c-gq8hn
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.983ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.21ms, 2.748ms, 2.708ms, 2.981ms, 3.107ms, 3.476ms, 56.192ms
-Bytes In      [total, mean]                     738831001, 2736.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.637ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.04ms, 6.568ms, 6.422ms, 7.278ms, 7.807ms, 9.61ms, 52.767ms
+Bytes In      [total, mean]                     822279116, 3045.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-21
-Pod: vegeta-ns-21-7dcff8bf7d-mx8g2
+Pod: vegeta-ns-21-75568784d6-rg42c
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.76ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.205ms, 2.848ms, 2.795ms, 3.136ms, 3.295ms, 3.82ms, 57.87ms
-Bytes In      [total, mean]                     738828801, 2736.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.666ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.954ms, 6.666ms, 6.546ms, 7.324ms, 7.817ms, 9.65ms, 28.123ms
+Bytes In      [total, mean]                     822550692, 3046.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-22
-Pod: vegeta-ns-22-7fb59b47-z9mpp
+Pod: vegeta-ns-22-6bc4778c99-7s8cl
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.664ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.138ms, 2.673ms, 2.636ms, 2.893ms, 3.011ms, 3.359ms, 67.084ms
-Bytes In      [total, mean]                     739370401, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.217ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.946ms, 6.43ms, 6.33ms, 6.976ms, 7.357ms, 9.101ms, 53.092ms
+Bytes In      [total, mean]                     822547224, 3046.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-23
-Pod: vegeta-ns-23-78ddd79448-m7lbf
+Pod: vegeta-ns-23-6b9fdbcdb4-s2dlf
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.861ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.047ms, 2.677ms, 2.623ms, 2.961ms, 3.115ms, 3.563ms, 68.344ms
-Bytes In      [total, mean]                     739100983, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.863ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.027ms, 6.472ms, 6.361ms, 7.031ms, 7.433ms, 9.17ms, 74.128ms
+Bytes In      [total, mean]                     822543306, 3046.46
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-24
-Pod: vegeta-ns-24-c8b5d58f-v8l8g
+Pod: vegeta-ns-24-f89c9c4f-hcwff
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3.292ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.087ms, 2.637ms, 2.598ms, 2.888ms, 3.018ms, 3.389ms, 40.721ms
-Bytes In      [total, mean]                     738827570, 2736.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.352ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5ms, 6.512ms, 6.4ms, 7.096ms, 7.544ms, 9.261ms, 55.431ms
+Bytes In      [total, mean]                     822009294, 3044.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-25
-Pod: vegeta-ns-25-7c9b875bc4-2p4vm
+Pod: vegeta-ns-25-679c7c495d-9lsmp
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.461ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.093ms, 2.603ms, 2.566ms, 2.832ms, 2.946ms, 3.259ms, 66.688ms
-Bytes In      [total, mean]                     739099793, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.795ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.785ms, 6.508ms, 6.404ms, 7.133ms, 7.534ms, 9.221ms, 60.64ms
+Bytes In      [total, mean]                     822013136, 3044.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-26
-Pod: vegeta-ns-26-7ff79ff87f-tb24v
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-26-6b7cc6d7f-zd5ls
+Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.591ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.086ms, 2.691ms, 2.647ms, 2.947ms, 3.082ms, 3.522ms, 58.263ms
-Bytes In      [total, mean]                     739100825, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.688ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.614ms, 6.281ms, 6.21ms, 6.823ms, 7.116ms, 8.717ms, 100.235ms
+Bytes In      [total, mean]                     822822967, 3047.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-27
-Pod: vegeta-ns-27-567d75c9b4-ftrbh
+Pod: vegeta-ns-27-649c95f9f6-m9v88
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.515ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.149ms, 2.701ms, 2.659ms, 2.946ms, 3.072ms, 3.428ms, 70.482ms
-Bytes In      [total, mean]                     739369559, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.158ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.998ms, 6.889ms, 6.676ms, 7.812ms, 8.49ms, 10.555ms, 64.656ms
+Bytes In      [total, mean]                     821478236, 3042.51
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-28
-Pod: vegeta-ns-28-7ddd7fbbdf-l6568
-Status Codes  [code:count]                      200:270000  
+Pod: vegeta-ns-28-769756765c-vs2gk
+Status Codes  [code:count]                      200:270001  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.445ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.085ms, 2.62ms, 2.577ms, 2.865ms, 2.995ms, 3.38ms, 66.915ms
-Bytes In      [total, mean]                     738561597, 2735.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.724ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.915ms, 6.326ms, 6.23ms, 6.892ms, 7.252ms, 8.889ms, 76.086ms
+Bytes In      [total, mean]                     821469771, 3042.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-29
-Pod: vegeta-ns-29-84b48f4cdb-qcwrf
+Pod: vegeta-ns-29-6d69d4b646-pws2r
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.605ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.078ms, 2.713ms, 2.668ms, 2.988ms, 3.133ms, 3.595ms, 47.728ms
-Bytes In      [total, mean]                     738827236, 2736.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.355ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.91ms, 6.515ms, 6.403ms, 7.14ms, 7.621ms, 9.345ms, 31.511ms
+Bytes In      [total, mean]                     822818222, 3047.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-30
-Pod: vegeta-ns-30-7f5787c66d-2hcwg
+Pod: vegeta-ns-30-d7d8954cb-9x2cb
 Status Codes  [code:count]                      200:270001  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.544ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.087ms, 2.685ms, 2.634ms, 2.977ms, 3.133ms, 3.574ms, 40.378ms
-Bytes In      [total, mean]                     739099108, 2737.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.056ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.944ms, 6.52ms, 6.398ms, 7.133ms, 7.59ms, 9.409ms, 72.893ms
+Bytes In      [total, mean]                     822561705, 3046.52
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-31
-Pod: vegeta-ns-31-7f485ffb95-x58hk
+Pod: vegeta-ns-31-677cb58c-z8pm8
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.673ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  1.973ms, 2.599ms, 2.556ms, 2.829ms, 2.952ms, 3.296ms, 70.849ms
-Bytes In      [total, mean]                     739366587, 2738.39
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.436ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.914ms, 6.432ms, 6.335ms, 6.929ms, 7.311ms, 9.062ms, 105.371ms
+Bytes In      [total, mean]                     822546194, 3046.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-32
-Pod: vegeta-ns-32-677b75d49d-j6m7v
+Pod: vegeta-ns-32-f5c5fcccd-v8nkf
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.455ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.105ms, 2.65ms, 2.611ms, 2.892ms, 3.015ms, 3.399ms, 54.909ms
-Bytes In      [total, mean]                     739370447, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.382ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.877ms, 6.441ms, 6.356ms, 7.015ms, 7.373ms, 9.058ms, 34.198ms
+Bytes In      [total, mean]                     822814885, 3047.46
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-33
-Pod: vegeta-ns-33-65c8b7fd45-cln85
+Pod: vegeta-ns-33-546b74c7bf-8vt2g
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3.095ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.089ms, 2.684ms, 2.641ms, 2.937ms, 3.072ms, 3.474ms, 43.742ms
-Bytes In      [total, mean]                     738827844, 2736.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.354ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.938ms, 6.508ms, 6.413ms, 7.101ms, 7.481ms, 9.147ms, 57.889ms
+Bytes In      [total, mean]                     822278525, 3045.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-34
-Pod: vegeta-ns-34-8577bcc64-bh7xz
+Pod: vegeta-ns-34-848f97bcf6-q25gx
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.846ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.07ms, 2.648ms, 2.602ms, 2.905ms, 3.041ms, 3.437ms, 58.897ms
-Bytes In      [total, mean]                     739100899, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.293ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.833ms, 6.407ms, 6.333ms, 6.937ms, 7.272ms, 8.884ms, 48.831ms
+Bytes In      [total, mean]                     822546725, 3046.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-35
-Pod: vegeta-ns-35-596cdd49c9-fr9jf
+Pod: vegeta-ns-35-6bd9dcc4cf-mft77
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.516ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.046ms, 2.622ms, 2.583ms, 2.863ms, 2.987ms, 3.359ms, 57.445ms
-Bytes In      [total, mean]                     739370852, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.714ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.881ms, 6.31ms, 6.225ms, 6.822ms, 7.134ms, 8.746ms, 99.261ms
+Bytes In      [total, mean]                     822548200, 3046.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-36
-Pod: vegeta-ns-36-6c4786b6cd-c8djl
+Pod: vegeta-ns-36-5f6555f874-wkhqm
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.325ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.051ms, 2.62ms, 2.575ms, 2.892ms, 3.035ms, 3.443ms, 13.886ms
-Bytes In      [total, mean]                     739099945, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.747ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.989ms, 6.431ms, 6.33ms, 6.975ms, 7.356ms, 9.107ms, 68.88ms
+Bytes In      [total, mean]                     822827907, 3047.51
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-37
-Pod: vegeta-ns-37-78bc7477d5-pgb5t
+Pod: vegeta-ns-37-5757995689-9qchk
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.885ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.14ms, 2.745ms, 2.702ms, 3.031ms, 3.171ms, 3.572ms, 20.78ms
-Bytes In      [total, mean]                     738561037, 2735.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.877ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.093ms, 6.913ms, 6.727ms, 7.757ms, 8.488ms, 10.504ms, 61.603ms
+Bytes In      [total, mean]                     822553795, 3046.50
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-38
-Pod: vegeta-ns-38-6c569bfdcb-l6wl8
-Status Codes  [code:count]                      200:270000  
-Error Set:
-Requests      [total, rate, throughput]         270001, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.516ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.149ms, 2.704ms, 2.662ms, 2.963ms, 3.096ms, 3.488ms, 43.499ms
-Bytes In      [total, mean]                     739101590, 2737.40
-Bytes Out     [total, mean]                     0, 0.00
-Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270001  
-Error Set:
-
-Namespace: ns-39
-Pod: vegeta-ns-39-696c555f59-f6q5c
+Pod: vegeta-ns-38-59b6895b88-cbvck
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.543ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.067ms, 2.569ms, 2.537ms, 2.788ms, 2.897ms, 3.203ms, 54.953ms
-Bytes In      [total, mean]                     739641069, 2739.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.555ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.017ms, 6.502ms, 6.395ms, 7.104ms, 7.514ms, 9.315ms, 55.606ms
+Bytes In      [total, mean]                     822273244, 3045.46
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:270000  
+Error Set:
+
+Namespace: ns-39
+Pod: vegeta-ns-39-575567cfb7-6ms2n
+Status Codes  [code:count]                      200:270000  
+Error Set:
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.261ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.715ms, 6.252ms, 6.178ms, 6.801ms, 7.091ms, 8.582ms, 62.35ms
+Bytes In      [total, mean]                     822007724, 3044.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-40
-Pod: vegeta-ns-40-545bc6bf59-wxhs9
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-40-8dfbd4967-xbttw
+Status Codes  [code:count]                      200:270000  
 Error Set:
-Requests      [total, rate, throughput]         270001, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.592ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.093ms, 2.718ms, 2.672ms, 3ms, 3.145ms, 3.557ms, 59.188ms
-Bytes In      [total, mean]                     738563228, 2735.41
+Requests      [total, rate, throughput]         270000, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.051ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.946ms, 6.584ms, 6.451ms, 7.255ms, 7.768ms, 9.46ms, 58.479ms
+Bytes In      [total, mean]                     822274031, 3045.46
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270001  
+Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-41
-Pod: vegeta-ns-41-7c477d7688-w58z8
+Pod: vegeta-ns-41-745b746776-5l7tv
 Status Codes  [code:count]                      200:270000  
 Error Set:
-Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 3ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.116ms, 2.665ms, 2.619ms, 2.921ms, 3.063ms, 3.46ms, 64.086ms
-Bytes In      [total, mean]                     739099310, 2737.40
+Requests      [total, rate, throughput]         270001, 450.00, 450.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.669ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.716ms, 6.247ms, 6.177ms, 6.757ms, 7.048ms, 8.561ms, 54.118ms
+Bytes In      [total, mean]                     822547093, 3046.46
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
-Status Codes  [code:count]                      200:270000  
+Status Codes  [code:count]                      200:270001  
 Error Set:
 
 Namespace: ns-42
-Pod: vegeta-ns-42-7d8cccd965-ccg2c
+Pod: vegeta-ns-42-56458f56b9-pz2nc
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.67ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.104ms, 2.76ms, 2.71ms, 3.08ms, 3.232ms, 3.733ms, 36.066ms
-Bytes In      [total, mean]                     739371041, 2738.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.964ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.734ms, 6.211ms, 6.153ms, 6.738ms, 7.014ms, 8.477ms, 50.323ms
+Bytes In      [total, mean]                     822820012, 3047.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-43
-Pod: vegeta-ns-43-6bbd9f58fd-6gzl7
+Pod: vegeta-ns-43-5f7b695c98-l4pfh
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.66ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.117ms, 2.679ms, 2.642ms, 2.927ms, 3.05ms, 3.405ms, 45.844ms
-Bytes In      [total, mean]                     738830804, 2736.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.707ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.824ms, 6.399ms, 6.315ms, 6.938ms, 7.282ms, 8.887ms, 41.641ms
+Bytes In      [total, mean]                     822550106, 3046.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-44
-Pod: vegeta-ns-44-86bbd789f5-bsh64
-Status Codes  [code:count]                      200:270001  
+Pod: vegeta-ns-44-76d5995f95-ccwtw
+Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.558ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.02ms, 2.754ms, 2.705ms, 3.047ms, 3.195ms, 3.643ms, 56.25ms
-Bytes In      [total, mean]                     738554635, 2735.39
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.419ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.945ms, 6.544ms, 6.414ms, 7.201ms, 7.653ms, 9.397ms, 99.844ms
+Bytes In      [total, mean]                     822551875, 3046.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-45
-Pod: vegeta-ns-45-57d874b948-tdcjb
+Pod: vegeta-ns-45-6f86449b4-bcx5b
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.597ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.037ms, 2.621ms, 2.574ms, 2.894ms, 3.042ms, 3.46ms, 53.47ms
-Bytes In      [total, mean]                     739099579, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 5.375ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.77ms, 6.307ms, 6.218ms, 6.875ms, 7.211ms, 8.812ms, 68.958ms
+Bytes In      [total, mean]                     822005724, 3044.47
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-46
-Pod: vegeta-ns-46-fbc486d49-x4t8r
+Pod: vegeta-ns-46-6f5b459777-2x6h4
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.61ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.018ms, 2.653ms, 2.6ms, 2.935ms, 3.091ms, 3.531ms, 60.518ms
-Bytes In      [total, mean]                     739097819, 2737.40
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.007ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.959ms, 6.589ms, 6.457ms, 7.245ms, 7.732ms, 9.595ms, 64.232ms
+Bytes In      [total, mean]                     822548679, 3046.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-47
-Pod: vegeta-ns-47-b4d8b6786-xssgv
+Pod: vegeta-ns-47-b96579f78-pnc7p
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.666ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.086ms, 2.647ms, 2.607ms, 2.9ms, 3.026ms, 3.38ms, 58.936ms
-Bytes In      [total, mean]                     739099550, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.542ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.968ms, 6.632ms, 6.508ms, 7.252ms, 7.732ms, 9.559ms, 82.258ms
+Bytes In      [total, mean]                     822552558, 3046.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-48
-Pod: vegeta-ns-48-579b984d55-swdc6
+Pod: vegeta-ns-48-865469fcf9-m2st7
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.608ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.122ms, 2.695ms, 2.656ms, 2.939ms, 3.063ms, 3.455ms, 52.547ms
-Bytes In      [total, mean]                     739101311, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.178ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.016ms, 6.669ms, 6.507ms, 7.431ms, 8.017ms, 9.869ms, 53.057ms
+Bytes In      [total, mean]                     822280302, 3045.48
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-49
-Pod: vegeta-ns-49-bdbc5fcfb-l8ktw
+Pod: vegeta-ns-49-7667984f76-6vbw5
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.4ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.03ms, 2.625ms, 2.585ms, 2.87ms, 2.994ms, 3.379ms, 58.099ms
-Bytes In      [total, mean]                     739101142, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 7.64ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  4.914ms, 6.471ms, 6.36ms, 7.076ms, 7.501ms, 9.186ms, 64.6ms
+Bytes In      [total, mean]                     822552632, 3046.49
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 Error Set:
 
 Namespace: ns-50
-Pod: vegeta-ns-50-78d5d67cfd-5d5zc
+Pod: vegeta-ns-50-858b9dbc6b-8j7s4
 Status Codes  [code:count]                      200:270000  
 Error Set:
 Requests      [total, rate, throughput]         270000, 450.00, 450.00
-Duration      [total, attack, wait]             10m0s, 10m0s, 2.778ms
-Latencies     [min, mean, 50, 90, 95, 99, max]  2.084ms, 2.647ms, 2.609ms, 2.886ms, 3.01ms, 3.372ms, 56.601ms
-Bytes In      [total, mean]                     739100903, 2737.41
+Duration      [total, attack, wait]             10m0s, 10m0s, 6.839ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  5.065ms, 6.885ms, 6.701ms, 7.707ms, 8.33ms, 10.241ms, 104.518ms
+Bytes In      [total, mean]                     821477637, 3042.51
 Bytes Out     [total, mean]                     0, 0.00
 Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  

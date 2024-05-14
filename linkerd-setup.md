@@ -181,52 +181,7 @@ echo "GET http://tier-1-app-a.ns-1.svc.cluster.local:8080" | vegeta attack -dns-
 ```
 
 ## uninstall
+```bash
 helm uninstall linkerd-control-plane -n linkerd
 helm uninstall linkerd-crds -n linkerd
-
-## 50 namespace app notes
-- 50 namespace isolated applications
-- 3-tier application, 4 deployments per namespace, 1 replicas per deployment 
-  - A > B1,B2 > C
-  - CPU requests: 700m // CPU limits: 700m (guaranteed QoS)
-  - MEM requests: 500Mi // MEM limits: 500Mi (guaranteed QoS)
-- Application Latency expectations:
-  - average latency < 40ms
-  - max latency < 200ms
-- Expected CPU utilization tuned to around 30-40% (visualized in GKE Observability)
-
-Total application baseline requirements are 140 CPU cores and 100 GB memory
-
-- Load generator per namespace targeting tier 1 application level
-  - deployed to separate loadgen node pool
-  - using n2-standard-8 spot instances in autoscaling mode 1-6 nodes
-  - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
-  - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
-  - Sidecar per Load Generator adds 200m // 256 Mi per client
-
-Total load generator baseline requirements are 30 CPU cores and 22 GB memory
-
-- LinkerD Component Requests:
-  - 200 sidecars (50 namespaces // 4 services each namespace) - `200m` CPU and `256Mi` memory
-  - linkerd - `50m` and `128Mi` memory
-  
-Total LinkerD Components requirements are CPU: 40 CPU Cores  and 52GB memory
-
-#### Total expected baseline (not including default GKE addons)
-Total expected baseline requirements: 210 CPU Cores and 174GB memory
-
-## Experiment outcome
-- 12 application nodes (n2-standard-8)
-- 3 loadgenerator nodes (n2-standard-8)
-- Total CPU: 240 vCPU
-- stable 200 RPS across 50 load generators x 4 services per namespace totaling 10K RPS
-- Average latency in the 5-15ms, max latency under our target of <200ms
-- Average latency in the 4-6ms, max latency of <110ms which is lower than our target of <200ms
-
-- Number of Deployments using `k get deploy -A | wc -l`: 267
-- Number of Pods using `k get pods -A | grep Running | wc -l`: 335
-- Number of Services using `k get svc -A | wc -l`: 220
-- Number of Containers `kubectl get pod --all-namespaces | awk '{print $3}' | awk -F/ '{s+=$1} END {print s}'`: 649
-
-GKE Observability (30 min)
-![50-app-ambient-gke-observability](.images/50-app-linkerd-gke-observability.png)
+```
