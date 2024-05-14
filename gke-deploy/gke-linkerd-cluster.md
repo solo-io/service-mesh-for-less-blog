@@ -7,7 +7,7 @@ Set the following variables for cluster name, zone, machine type, number of node
 GKE_CLUSTER_NAME="gke-linkerd-1"
 GKE_CLUSTER_ZONE="us-west4-b"
 MAIN_MACHINE_TYPE="n2-standard-8"
-MAIN_NUM_NODES="30"
+MAIN_NUM_NODES=""
 GKE_PROJECT=""
 CLUSTER_VERSION="1.28.3-gke.1118000"
 ```
