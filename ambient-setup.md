@@ -165,6 +165,21 @@ cd experiment-data
 ./tail-logs.sh
 ```
 
+## configure l4 auth policy
+```bash
+kubectl apply -k tiered-app/50-namespace-app/ambient/l4-policy
+```
+
+## configure waypoint proxy per namespace
+```bash
+kubectl apply -k tiered-app/50-namespace-app/ambient/waypoints
+```
+
+## configure l7 auth policy
+```bash
+kubectl apply -k tiered-app/50-namespace-app/ambient/l7-policy
+```
+
 ## example exec into vegeta to run your own test (optional)
 ```bash
 kubectl --namespace ns-1 exec -it deploy/vegeta -c vegeta -- /bin/sh
