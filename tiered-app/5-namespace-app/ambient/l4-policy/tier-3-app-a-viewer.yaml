@@ -23,3 +23,8 @@ spec:
        - cluster.local/ns/ns-3/sa/tier-2-app-b
        - cluster.local/ns/ns-4/sa/tier-2-app-b
        - cluster.local/ns/ns-5/sa/tier-2-app-b
+       - cluster.local/ns/ns-1/sa/waypoint
+       - cluster.local/ns/ns-2/sa/waypoint
+       - cluster.local/ns/ns-3/sa/waypoint
+       - cluster.local/ns/ns-4/sa/waypoint
+       - cluster.local/ns/ns-5/sa/waypoint
