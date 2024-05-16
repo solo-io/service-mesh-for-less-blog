@@ -1,6 +1,6 @@
-# Istio Ambient Mode - Doing More for Less!
+# Istio in Ambient Mode - Doing More for Less!
 
-With the introduction of Istio Ambient mode, platform teams can more efficiently adopt service mesh features without introducing a significant resource overhead to their end consumers.
+With the introduction of Istio's ambient data plane mode, platform teams can more efficiently adopt service mesh features without introducing a significant resource overhead to their end consumers.
 
 Here at Solo.io a common story that we hear among our customer-base and prospects that goes like this:
 "The Security team has mandated a zero-trust posture across the entire organization, and as a result of this requirement I am looking to adopt a service mesh. However, in doing some research we have discovered that leveraging a sidecar based approach will incur some additional cost in resource reservations per app (by default in Istio 100m CPU and 128Mi MEM per sidecar), and operational overhead in managing the lifecycle of a sidecar deployment"
@@ -23,7 +23,7 @@ But what if the user doesn't need these capabilities immediate near-term? Despit
 ![ambient-mode-architecture](.images/Istio-Ambient-Mesh-Zero-Trust-Security-1024x528.png)
 
 
-Now, returning to our original problem statement, in order to comply with the zero-trust mandate from Security, we no longer need to adopt a sidecar per application. Instead, we can leverage Ambient mode's `ztunnel` per-node architecture, which separates the responsibilities of zero-trust networking and Layer 7 policy handling. The resource costs associated with these components are as follows:
+Now, returning to our original problem statement, in order to comply with the zero-trust mandate from Security, we no longer need to adopt a sidecar per application. Instead, we can leverage ambient mode's `ztunnel` per-node architecture, which separates the responsibilities of zero-trust networking and Layer 7 policy handling. The resource costs associated with these components are as follows:
 
 Istio Component Resource Requirements (all configurable for smaller deployments):
 - ztunnel - `500m` CPU and `2048Mi` memory per node
@@ -90,9 +90,9 @@ All of these considerations go away when adopting a sidecarless service mesh arc
 
 # What about Performance?
 
-With the premise of this blog post focused on doing more for less, we have already covered two initial goals of Ambient mode in reducing infrastructure cost as well as simplifying operations, but what about performance?
+With the premise of this blog post focused on doing more for less, we have already covered two initial goals of ambient mode in reducing infrastructure cost as well as simplifying operations. But what about performance?
 
-Taking the example app above, we ran the following experiment to validate that Ambient mode can perform at-par or better than the traditional sidecar based approach. For this test, we evaluated the same application deployed on a cluster with LinkerD against a cluster with Istio Ambient Mode.
+Taking the example app above, we ran the following experiment to validate that ambient mode can perform at-par or better than the traditional sidecar data plane mode. For this test, we evaluated the same application deployed on a cluster with Linkerd against a cluster with Istio in ambient mode.
 
 First we set some baseline performance requirements for our 3-tier application workload that is deployed across 50 namespaces. 
 
@@ -152,11 +152,11 @@ Status Codes  [code:count]                      200:270000
 
 We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`. Full results for the baseline tests can be seen in the `/experiment-data` directory
 
-## LinkerD mTLS testing with v1.16.11
+## Linkerd mTLS testing with stable-2.14.10
 
-Starting with LinkerD, we noticed that by default there are no proxy resource requests/limits defined, unlike Istio which sets the default sidecar proxy resource requests to `100m` CPU and `128Mi` MEM.
+Starting with Linkerd, we noticed that by default there are no proxy resource requests/limits defined, unlike Istio which sets the default sidecar proxy resource requests to `100m` CPU and `128Mi` MEM.
 
-While the results of our test were acceptable without any resource requests defined for the proxies (sub `4-8ms` p99 latency), it generally is not a recommended way of running a service mesh in a production environment. In order to create an accurate comparison, we decided to test setting LinkerD proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the Helm values
+While the results of our test were acceptable without any resource requests defined for the proxies (sub `4-8ms` p99 latency), it generally is not a recommended way of running a service mesh in a production environment. In order to create an accurate comparison, we decided to test setting Linkerd proxy resources to match the default resources set by Istio at `100m` CPU and `128Mi` MEM per proxy with the Helm values
 ```bash
 --set proxy.cores=8
 --set proxy.resources.cpu.request=100m
@@ -200,7 +200,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `4.1ms`
 - highest P99 latency `6.5ms`
 
-From these results, we can derive that the addition of sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the LinkerD tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the Linkerd tests can be seen in the `/experiment-data` directory
 
 ## Istio Sidecar mTLS testing with v1.22.0
 
@@ -251,7 +251,7 @@ Status Codes  [code:count]                      200:270000
 
 From these results, we can derive that the addition of sidecars to our test application adds around `4.5ms - 8.7ms` of latency to our application round-trip for our 3-tier service. Full results for the sidecar tests can be seen in the `/experiment-data` directory
 
-## Istio Ambient Mode mTLS testing with v1.22.0
+## Istio ambient mode mTLS testing with v1.22.0
 
 In the ambient mesh, all inbound and outbound L4 TCP traffic between workloads is automatically secured using mTLS via HBONE, ztunnel, and x509 certificates. This security is enabled by labeling a namespace with `istio.io/dataplane-mode: ambient`, which ensures that ztunnel intercepts traffic for that namespace
 
@@ -300,13 +300,13 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `2.4ms`
 - highest P99 latency `3.3ms`
 
-From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the Ambient mode tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the L4-only datapath, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#dataplane-details)
 
-## Istio Ambient Mode mTLS + L4 mutual auth
+## Istio ambient mode mTLS + L4 mutual auth
 
-In addition to providing mTLS with minimal latency, let's take it a step further and explore performance when enabling mutual authentication using an AuthorizationPolicy resource.
+In addition to providing mTLS with minimal latency, let's take it a step further and explore performance when enabling mutual authentication using an `AuthorizationPolicy` resource.
 
 Here is an example policy that restricts access to `tier-1-app-a` to the sleep and loadgenerator clients in `ns-1` through `ns-50`
 ```bash
@@ -350,7 +350,7 @@ spec:
        - cluster.local/ns/ns-50/sa/tier-1-app-a
 ```
 
-Running the same test as previously, but with L4 AuthorizationPolicy configured for our services, we produced results similar to the following:
+Running the same test as previously, but with an L4 `AuthorizationPolicy` configured for our services, we produced results similar to the following:
 
 ```bash
 Namespace: ns-1
@@ -388,15 +388,15 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `2.4ms`
 - highest P99 latency `3.9ms`
 
-Comparing these results to the previous test, we observe that enforcing mutual authentication using Istio's AuthorizationPolicy incurs an additional latency of `0.1ms - 0.6ms` compared to our previous L4 mTLS-only results, and `0.9ms - 1.8ms` compared to baseline. These are excellent results for latency performance while providing both mTLS and mutual authentication for our applications! Full results for the Ambient mode tests are available in the `/experiment-data` directory.
+Comparing these results to the previous test, we observe that enforcing mutual authentication using Istio's AuthorizationPolicy incurs an additional latency of `0.1ms - 0.6ms` compared to our previous L4 mTLS-only results, and `0.9ms - 1.8ms` compared to baseline. These are excellent results for latency performance while providing both mTLS and mutual authentication for our applications! Full results for the ambient mode tests are available in the `/experiment-data` directory.
 
 For a detailed description on using L4 security policies, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/usage/l4-policy/)
 
-## Add the Waypoint Proxy for full L7 feature-set
+## Add a waypoint proxy for full L7 feature-set
 
-In the Intro we discussed L7 capabilities that come along with the sidecar pattern implementation. In Ambient, a waypoint proxy can be configured to add Layer 7 (L7) processing to a defined set of workloads. More detail on waypoint proxies can be found in the [Istio documentation](https://istio.io/latest/docs/ambient/usage/waypoint/)
+In the introduction we discussed L7 capabilities that come along with the sidecar pattern implementation. In ambient mode, a waypoint proxy can be configured to add Layer 7 (L7) processing to a defined set of workloads. More detail on waypoint proxies can be found in the [Istio documentation](https://istio.io/latest/docs/ambient/usage/waypoint/)
 
-If your application needs the following, then you will need to use a waypoint proxy:
+If your application needs any of the following, then you will need to use a waypoint proxy:
 
 - Traffic management: HTTP routing & load balancing, circuit breaking, rate limiting, fault injection, retries, timeouts
 - Security: Rich authorization policies based on L7 primitives such as request type or HTTP header
@@ -404,7 +404,7 @@ If your application needs the following, then you will need to use a waypoint pr
 
 A waypoint proxy acts as a gateway to a resource (a namespace, service or pod). Istio enforces that all traffic coming into the resource goes through the waypoint, which then enforces all policies for that resource.
 
-A more detailed diagram of the ztunnel datapath via an interim waypoint looks like this
+A more detailed diagram of the ztunnel datapath via a waypoint looks like this
 ![ztunnel-waypoint-datapath-1](.images/ztunnel-waypoint-datapath-1.png)
 
 For a detailed description on using L7 security policies, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/usage/l7-features/)
@@ -470,7 +470,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `4.1ms`
 - highest P99 latency `9.9ms`
 
-Comparing these results to the L4 mTLS-only results, we observe that enforcing L4 + L7 mutual authentication using Istio's `AuthorizationPolicy` incurs an additional latency of `1.7ms - 6.6ms` which results in an additional `2.6ms - 7.8ms` latency compared to baseline. Full results for the Ambient mode tests are available in the `/experiment-data` directory.
+Comparing these results to the L4 mTLS-only results, we observe that enforcing L4 + L7 mutual authentication using Istio's `AuthorizationPolicy` incurs an additional latency of `1.7ms - 6.6ms` which results in an additional `2.6ms - 7.8ms` latency compared to baseline. Full results for the ambient mode tests are available in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the Ztunnel datapath via an interim waypoint, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#in-mesh-routing-with-waypoint-enabled)
 
@@ -485,17 +485,17 @@ In our hypothetical scenario, the adoption of Ambient mode fulfills the mTLS man
 
 From a baseline monthly cost of $5475 for our 50 namespace workload
 
-- LinkerD and Istio Sidecar can add up to **36%** increase in infrastructure costs
-- L4 Istio Ambient incurs additional cost of **5%** but is still much lower than the sidecar approach
-- Istio Ambient with Waypoint Proxy (configured to be highly available) for the full L4/L7 feature set is much lower at **+15%** increase in cost
+- Linkerd and Istio's sidecar data plane mode can add up to **36%** increase in infrastructure costs
+- Istio's ambient data plane mode (L4 only) incurs additional cost of **5%** - substantially lower than using sidecars!
+- Istio's ambient mode with waypoint proxies (configured to be highly available) for the full L4/L7 feature set is also lower at a **15%** increase in cost
 
 From a baseline performance of `1.5ms` - `2.1ms`
 
-- LinkerD: adds `2.6ms` - `4.4ms` of round trip latency for L4 mTLS
-- Istio Sidecar Mode: adds `4.5ms` - `8.7ms` of round trip latency for  L4/L7 mTLS + L7 features
-- Istio Ambient Mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS only
-- Istio Ambient Mode: adds `0.9ms` - `1.8ms` of round trip latency for L4 mTLS + L4 mutual auth
-- Istio Ambient Mode with Waypoint Proxy: adds `2.6ms` - `7.8ms` of round trip latency for L4/L7 mTLS + L4/L7 mutual auth
+- Linkerd: adds `2.6ms` - `4.4ms` of round trip latency for L4 mTLS
+- Istio in sidecar mode: adds `4.5ms` - `8.7ms` of round trip latency for  L4/L7 mTLS + L7 features
+- Istio in ambient mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS only
+- Istio in ambient mode: adds `0.9ms` - `1.8ms` of round trip latency for L4 mTLS + L4 mutual auth
+- Istio in ambient mode with waypoint proxies: adds `2.6ms` - `7.8ms` of round trip latency for L4/L7 mTLS + L4/L7 mutual auth
 
 ![percentage-improvement-equation](.images/percentage-improvement-equation-1.png)
 
@@ -510,4 +510,4 @@ As shown above, depending on the use-case the introduction of Istio's ambient mo
 
 Adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from improved resource utilization while maintaining or even enhancing application performance. It is clear here that we are benefitting while doing more for less!
 
-As a co-founder and leader in the development of the Istio Ambient sidecarless architecture, Solo.io is uniquely positioned to help our customers adopt this architecture for production-grade security and compliance requirements. [Please reach out to connect with us!](https://www.solo.io/company/contact/)
+As a co-creator and leader in the development of the Istio ambient sidecarless architecture, Solo.io is uniquely positioned to help our customers adopt this architecture for production-grade security and compliance requirements. [Please reach out to connect with us!](https://www.solo.io/company/contact/)
