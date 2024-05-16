@@ -106,9 +106,11 @@ Our Loadgenerator Client Configuration:
 - Load generator per namespace targeting tier 1 application level
   - deployed to separate loadgen node pool to ensure unbiased performance measurements by preventing resource contention and interference
   - using n2-standard-8 spot instances in autoscaling mode
-  - Each loadgen client is configured at 450 RPS for a total of *22.5K RPS cluster-wide*
+  - Each loadgen client is configured at 450 RPS to drive a total of *22.5K RPS* to our applications
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
+
+Given the fan-out architecture shown in the high level architecture section above with loadgen > A > B1,B2 > C at 450 RPS, we expect the **total mesh traffic in the cluster to be ~112K RPS!!**
 
 ## Baseline testing
 Starting with our baseline application (no mesh) to understand the base performance characteristics
