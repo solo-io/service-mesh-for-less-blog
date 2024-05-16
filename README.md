@@ -253,6 +253,11 @@ From these results, we can derive that the addition of sidecars to our test appl
 
 ## Istio Ambient Mode mTLS testing with v1.22.0
 
+In the ambient mesh, all inbound and outbound L4 TCP traffic between workloads is automatically secured using mTLS via HBONE, ztunnel, and x509 certificates. This security is enabled by labeling a namespace with `istio.io/dataplane-mode: ambient`, which ensures that ztunnel intercepts traffic for that namespace
+
+A more detailed diagram of the basic ztunnel L4-only datapath looks like this
+![ztunnel-datapath-1](.images/ztunnel-datapath-1.png)
+
 With Ambient, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
 - Deploy the applications
 - Run the load generator clients
@@ -398,6 +403,9 @@ If your application needs the following, then you will need to use a waypoint pr
 - Observability: HTTP metrics, access logging, tracing
 
 A waypoint proxy acts as a gateway to a resource (a namespace, service or pod). Istio enforces that all traffic coming into the resource goes through the waypoint, which then enforces all policies for that resource.
+
+A more detailed diagram of the ztunnel datapath via an interim waypoint looks like this
+![ztunnel-waypoint-datapath-1](.images/ztunnel-waypoint-datapath-1.png)
 
 For a detailed description on using L7 security policies, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/usage/l7-features/)
 
