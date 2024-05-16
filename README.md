@@ -260,7 +260,7 @@ In the ambient mesh, all inbound and outbound L4 TCP traffic between workloads i
 A more detailed diagram of the basic ztunnel L4-only datapath looks like this
 ![ztunnel-datapath-1](.images/ztunnel-datapath-1.png)
 
-With Ambient, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
+With ambient mode, we don't have to worry about the sidecar proxy or its resources, so the test is rather simple:
 - Deploy the applications
 - Run the load generator clients
 
@@ -302,7 +302,7 @@ Status Codes  [code:count]                      200:270000
 - lowest P50 latency `2.4ms`
 - highest P99 latency `3.3ms`
 
-From these results, we can derive that the addition of Ambient mode to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
+From these results, we can derive that the addition of the ambient data plane to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the L4-only datapath, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#dataplane-details)
 
@@ -478,12 +478,12 @@ For a detailed description of the high-level architecture of the Ztunnel datapat
 
 # Conclusion
 
-In this blog we explored three main value propositions for Istio Ambient Mode
+In this blog we explored three main value propositions for Istio's ambient mode:
 - **Simplified Operations**: Eliminating sidecars reduces the operational burden on Platform and Application teams, particularly during proxy upgrades.
 - **Reduced Infrastructure Costs**: By adopting a sidecarless architecture, the resource costs are scaled with the platform rather than each application, leading to significant savings.
 - **Improved Performance**: Ambient mode offers improved resource utilization and superior latency performance compared to traditional sidecar and alternative service mesh approaches.
 
-In our hypothetical scenario, the adoption of Ambient mode fulfills the mTLS mandate from the Security team without imposing significant additional costs on the Application team. From a performance perspective, the additional latency incurred by utilizing a mesh is minimal
+In our hypothetical scenario, the adoption of ambient mode fulfills the mTLS mandate from the Security team without imposing significant additional costs on the Application team. From a performance perspective, the additional latency incurred by utilizing a mesh is minimal
 
 From a baseline monthly cost of $5475 for our 50 namespace workload
 
