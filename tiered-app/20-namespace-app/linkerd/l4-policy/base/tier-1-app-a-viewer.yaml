@@ -10,7 +10,7 @@ spec:
   requiredAuthenticationRefs:
     - name: vegeta
       kind: ServiceAccount
-      namespace: ns-1
+      namespace: $changeme
 ---
 apiVersion: policy.linkerd.io/v1alpha1
 kind: AuthorizationPolicy
@@ -24,4 +24,4 @@ spec:
   requiredAuthenticationRefs:
     - name: sleep
       kind: ServiceAccount
-      namespace: client
+      namespace: $changeme

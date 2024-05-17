@@ -6,4 +6,25 @@ kind: Kustomization
 resources:
 - ../base
 
+patches:
+# patch for all authorizationpolicies
+- target:
+    group: policy.linkerd.io
+    version: v1alpha1
+    kind: AuthorizationPolicy
+  patch: |-
+    - op: replace
+      path: /spec/requiredAuthenticationRefs/0/namespace
+      value: ns-18
+# more specific patch for tier-1-app-a-viewer-sleep
+- target:
+    group: policy.linkerd.io
+    version: v1alpha1
+    kind: AuthorizationPolicy
+    name: tier-1-app-a-viewer-sleep
+  patch: |-
+    - op: replace
+      path: /spec/requiredAuthenticationRefs/0/namespace
+      value: client
+
 namespace: ns-18

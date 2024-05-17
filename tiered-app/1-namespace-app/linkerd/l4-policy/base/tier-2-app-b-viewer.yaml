@@ -10,4 +10,4 @@ spec:
   requiredAuthenticationRefs:
     - name: tier-1-app-a
       kind: ServiceAccount
-      namespace: ns-1
+      namespace: $changeme

@@ -10,13 +10,13 @@ spec:
   requiredAuthenticationRefs:
     - name: tier-2-app-a
       kind: ServiceAccount
-      namespace: ns-1
+      namespace: $changeme
 ---
 apiVersion: policy.linkerd.io/v1alpha1
 kind: AuthorizationPolicy
 metadata:
   name: tier-3-app-a-viewer-b
-  namespace: ns-1
+  namespace: $changeme
 spec:
   targetRef:
     group: policy.linkerd.io
@@ -25,4 +25,4 @@ spec:
   requiredAuthenticationRefs:
     - name: tier-2-app-b
       kind: ServiceAccount
-      namespace: ns-1
+      namespace: $changeme
