@@ -15,10 +15,10 @@ In conversations with those further along in their service mesh journey, it's of
 - Facilitated implementation of service discovery and dynamic service routing
 - Simplified deployment of A/B testing and canary release strategies
 
-But what if the user doesn't need these capabilities immediate near-term? Despite their potential benefits to the organization, the overhead costs of implementing and maintaining these additional value-add features also come at an expense and require a level of organizational maturity. Moreover, the costs are incurred regardless of their utilization, potentially pressuring the team to prioritize these features even if they're merely nice-to-haves.
+But what if the user doesn't need these capabilities in the near-term? Despite their potential benefits to the organization, implementing and maintaining these additional value-add features also comes at a cost and requires a level of organizational maturity. Moreover, the costs are incurred regardless of their utilization, potentially pressuring the team to prioritize these features even if they're merely nice-to-haves.
 
 # Ambient Mode
-[Ambient mode](https://www.solo.io/blog/istio-ambient-mesh-evolution-service-mesh/) was launched on September 7th, 2022, introducing a new Istio data plane mode without sidecars that’s designed for simplified operations, broader application compatibility, and reduced infrastructure cost. Ambient splits Istio’s functionality into two distinct layers: the zero trust secure overlay layer, and optional Layer 7 processing layer. Compared with sidecars, the layered approach allows users to adopt Istio incrementally from no mesh, to the secure overlay, to full L7 processing as needed. This gives service mesh users two outstanding options from the same dedicated community: Istio with a sidecar model approach, or sidecarless Ambient mode.
+[Ambient mode](https://www.solo.io/blog/istio-ambient-mesh-evolution-service-mesh/) was launched on September 7th, 2022, introducing a new Istio data plane mode without sidecars that’s designed for simplified operations, broader application compatibility, and reduced infrastructure cost. Ambient splits Istio’s functionality into two distinct layers: the zero trust secure overlay layer, and optional Layer 7 processing layer. Compared with sidecars, the layered approach allows users to adopt Istio incrementally from no mesh, to mTLS based zero-trust overlay, to full L7 processing as needed. This gives service mesh users two outstanding options from the same dedicated community: Istio with a sidecar model approach, or sidecarless Ambient mode.
 
 ![ambient-mode-architecture](.images/Istio-Ambient-Mesh-Zero-Trust-Security-1024x528.png)
 
@@ -30,7 +30,7 @@ Istio Component Resource Requirements (all configurable for smaller deployments)
 - istio-cni - `100m` and `100Mi` memory per node
 - istiod - `500m` and `2Gi` memory per replica
 
-Ambient mode enables us to meet the mTLS requirement with a model that is less coupled to the resource costs of individual applications and instead scales with the cost of platform itself (more nodes, more `ztunnels`). With this approach, Application Owners no longer need to concern themselves with the presence of a sidecar in their workload, the lifecycle of that sidecar, and even the cost of the sidecar resource. Users of the sidecarless service mesh can assume that if the application is deployed on the cluster, it is inherently secure by default. Developers can then focus on developing and deploying their applications, increasing operational efficiency and providing a more seamless and frictionless developer productivity experience.
+Ambient mode enables us to meet the mTLS requirement with a model that is less coupled to the resource costs of individual applications and instead scales with the cost of the platform itself (more nodes, more `ztunnels`). With this approach, Application Owners no longer need to concern themselves with the presence of a sidecar in their workload, the lifecycle of that sidecar, and even the cost of the sidecar resource. Users of the sidecarless service mesh can assume that if the application is deployed on the cluster, it is inherently secure by default. Developers can then focus on developing and deploying their applications, increasing operational efficiency and providing a more seamless and frictionless developer productivity experience.
 
 # Let's look at some numbers
 
@@ -305,6 +305,9 @@ Status Codes  [code:count]                      200:270000
 From these results, we can derive that the addition of the ambient data plane to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the L4-only datapath, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#dataplane-details)
+
+### A detail worth noting
+The Istio community has been hard at work continuously improving the performance of the ambient mode components. From the Alpha release of ambient in 1.21.0 to Beta in 1.22.0 we observed an decrease from `0.9ms - 2ms` to `0.9ms - 1.2ms` of latency added to our application round-trip call to which is a notable **40%** improvement in P99 latency!
 
 ## Istio ambient mode mTLS + L4 mutual auth
 
