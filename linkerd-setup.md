@@ -170,6 +170,16 @@ cd experiment-data
 ./tail-logs.sh
 ```
 
+## configure l4 auth policy
+```bash
+kubectl apply -k tiered-app/50-namespace-app/linkerd/l4-policy
+```
+
+## configure l7 auth policy
+```bash
+kubectl apply -k tiered-app/50-namespace-app/linkerd/l7-policy
+```
+
 ## example exec into vegeta to run your own test (optional)
 ```bash
 kubectl --namespace ns-1 exec -it deploy/vegeta -c vegeta -- /bin/sh
