@@ -1,0 +1,12 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: l7-tier-3-app-a-authpolicy
+spec:
+  parentRefs:
+    - name: tier-3-app-a
+      kind: Server
+      group: policy.linkerd.io
+  rules:
+    - matches:
+      - method: GET

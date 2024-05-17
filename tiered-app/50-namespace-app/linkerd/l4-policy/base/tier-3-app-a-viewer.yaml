@@ -1,0 +1,28 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: tier-3-app-a-viewer-a
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: tier-3-app-a
+  requiredAuthenticationRefs:
+    - name: tier-2-app-a
+      kind: ServiceAccount
+      namespace: ns-1
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: tier-3-app-a-viewer-b
+  namespace: ns-1
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: tier-3-app-a
+  requiredAuthenticationRefs:
+    - name: tier-2-app-b
+      kind: ServiceAccount
+      namespace: ns-1

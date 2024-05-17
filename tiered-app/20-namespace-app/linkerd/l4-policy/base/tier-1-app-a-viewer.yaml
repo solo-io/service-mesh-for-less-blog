@@ -1,0 +1,27 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: tier-1-app-a-viewer-vegeta
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: tier-1-app-a
+  requiredAuthenticationRefs:
+    - name: vegeta
+      kind: ServiceAccount
+      namespace: ns-1
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: tier-1-app-a-viewer-sleep
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: tier-1-app-a
+  requiredAuthenticationRefs:
+    - name: sleep
+      kind: ServiceAccount
+      namespace: client

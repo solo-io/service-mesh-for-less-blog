@@ -1,0 +1,12 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: tier-2-app-a
+  labels:
+    app: tier-2-app-a
+spec:
+  podSelector:
+    matchLabels:
+      app: tier-2-app-a
+  port: 8080
+  proxyProtocol: HTTP/2

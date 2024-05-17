@@ -1,0 +1,36 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# list of resources to be Applied
+resources:
+- ns-1
+- ns-2
+- ns-3
+- ns-4
+- ns-5
+- ns-6
+- ns-7
+- ns-8
+- ns-9
+- ns-10
+- ns-11
+- ns-12
+- ns-13
+- ns-14
+- ns-15
+- ns-16
+- ns-17
+- ns-18
+- ns-19
+- ns-20
+- ns-21
+- ns-22
+- ns-23
+- ns-24
+- ns-25
+- ns-26
+- ns-27
+- ns-28
+- ns-29
+- ns-30
