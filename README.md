@@ -26,9 +26,10 @@ But what if the user doesn't need these capabilities in the near-term? Despite t
 Now, returning to our original problem statement, in order to comply with the zero-trust mandate from Security, we no longer need to adopt a sidecar per application. Instead, we can leverage ambient mode's `ztunnel` per-node architecture, which separates the responsibilities of zero-trust networking and Layer 7 policy handling. The resource costs associated with these components are as follows:
 
 Istio Component Resource Requirements (all configurable for smaller deployments):
-- ztunnel - `500m` CPU and `2048Mi` memory per node
+- ztunnel - `200m` CPU and `512Mi` memory per node
 - istio-cni - `100m` and `100Mi` memory per node
 - istiod - `500m` and `2Gi` memory per replica
+- waypoint proxy - `100m` CPU and `128Mi` per replica
 
 Ambient mode enables us to meet the mTLS requirement with a model that is less coupled to the resource costs of individual applications and instead scales with the cost of the platform itself (more nodes, more `ztunnels`). With this approach, Application Owners no longer need to concern themselves with the presence of a sidecar in their workload, the lifecycle of that sidecar, and even the cost of the sidecar resource. Users of the sidecarless service mesh can assume that if the application is deployed on the cluster, it is inherently secure by default. Developers can then focus on developing and deploying their applications, increasing operational efficiency and providing a more seamless and frictionless developer productivity experience.
 
@@ -60,7 +61,7 @@ A high level architecture looks like this:
 
 In an ideal world, where everything is perfectly scheduled like an expert tetris player, our capacity planning exercise would be a rather simple calculation
 
-![baseline-requirements-2](.images/baseline-requirements-2.png)
+![baseline-requirements-2](.images/baseline-requirements-3.png)
 
 Source: using the [Google Cloud Pricing Calculator](https://cloud.google.com/products/calculator?hl=en)
 
@@ -70,7 +71,7 @@ Source: using the [Google Cloud Pricing Calculator](https://cloud.google.com/pro
 
 In reality, Kubernetes scheduling is not perfect, and inefficiencies in bin packing workloads will result in additional resources consumed (nodes created) so that all workloads can be scheduled. The following table shows the actual results of deploying the example application described in our test environment:
 
-![bin-packing-3](.images/bin-packing-3.png)
+![bin-packing-3](.images/bin-packing-4.png)
 
 The results mirror the goals of the Ambient project in both simplifying operations of the service mesh (no sidecars!) as well as reducing infrastructure costs (no additional cost to fulfill mTLS requirement). We also see an added benefit where if we decide to incrementally adopt the full L7 feature set by adopting waypoint proxies, the cost would be **+15%** from baseline using `ztunnel` + waypoint proxies vs. the traditional sidecar approach at **+36%** of your baseline cost
 
