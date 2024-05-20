@@ -420,7 +420,6 @@ From a baseline performance of `1.57ms` (p50) and `1.82ms` (p95)
 - Istio in sidecar mode: adds `4.81ms` (p50) and `5.72ms` (p95) of round trip latency for  L4/L7 mTLS + L7 features
 - Istio in ambient mode: adds `0.79ms` (p50) and `0.85ms` (p95) of round trip latency for L4 mTLS only
 - Istio in ambient mode: adds `0.97ms` (p50) and `1.07ms` (p95) of round trip latency for L4 mTLS + L4 mutual auth
-- Istio in ambient mode with waypoint proxies: adds `4ms` (p50) and `4.83ms` (p95) of round trip latency for L4/L7 mTLS + L4/L7 mutual auth
 
 ![percentage-improvement-equation](.images/percentage-improvement-equation-1.png)
 
