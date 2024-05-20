@@ -148,7 +148,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency ~`1.57ms`
 - average P95 latency ~`1.82ms`
 
@@ -198,7 +198,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000 
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency ~`4.48ms`
 - average P95 latency ~`5.19ms`
 
@@ -247,7 +247,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency ~`6.38ms`
 - average P95 latency ~`7.54ms`
 
@@ -298,7 +298,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000   
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency `2.36ms`
 - average P95 latency `2.67ms`
 
@@ -387,7 +387,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency `2.54ms`
 - average P95 latency `2.89ms`
 
@@ -469,7 +469,7 @@ Success       [ratio]                           100.00%
 Status Codes  [code:count]                      200:270000  
 ```
 
-### Results across three 10 minute runs:
+### Results across several 10 minute runs:
 - average P50 latency `5.57ms`
 - average P95 latency `6.65ms`
 
@@ -479,7 +479,7 @@ For a detailed description of the high-level architecture of the Ztunnel datapat
 
 # Conclusion
 
-In this blog we explored three main value propositions for Istio's ambient mode:
+In this blog we explored several main value propositions for Istio's ambient mode:
 - **Simplified Operations**: Eliminating sidecars reduces the operational burden on Platform and Application teams, particularly during proxy upgrades.
 - **Reduced Infrastructure Costs**: By adopting a sidecarless architecture, the resource costs are scaled with the platform rather than each application, leading to significant savings.
 - **Improved Performance**: Ambient mode offers improved resource utilization and superior latency performance compared to traditional sidecar and alternative service mesh approaches.
