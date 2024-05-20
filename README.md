@@ -78,7 +78,7 @@ The results mirror the goals of the Ambient project in both simplifying operatio
 
 ![sidecar-1](.images/sidecar-1.png)
 
-One of the most common challenges that we see with service mesh adoption is the increase in operational overhead to manage the lifecycle of the sidecar for the Platform or Application owners. This challenge becomes particularly pronounced during proxy upgrades, such as transitioning from version 1.19 to 1.20 as depicted above
+One of the most common challenges that we see with service mesh adoption is the increase in operational overhead to manage the lifecycle of the sidecar for the Platform or Application owners. An example is depicted above - when transitioning from 1.19 to 1.20 every proxy sidecar in the cluster must be restarted to apply the new proxy version. Without a proper strategy in place, this operation can lead to significant downtime and disruption.
 
 With a sidecar approach, users need to ensure that Kubernetes + proxy is configured to do the following:
 - Initiate the draining process and stop accepting new connections
@@ -106,7 +106,7 @@ Our Loadgenerator Client Configuration:
 - Load generator per namespace targeting tier 1 application level
   - deployed to separate loadgen node pool to ensure unbiased performance measurements by preventing resource contention and interference
   - using n2-standard-8 spot instances in autoscaling mode
-  - Each loadgen client is configured at 450 RPS to drive a total of *22.5K RPS* to our applications
+  - Load generator drives 450 RPS into each application frontend. The internal call fanout is over 4 tiers so each namespace is processing ~2250 RPS and with 50 namespaces that gives us a total mesh RPS of **~112,500 RPS**
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
 
