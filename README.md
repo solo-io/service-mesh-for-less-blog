@@ -3,7 +3,7 @@
 With the introduction of Istio's ambient data plane mode, platform teams can more efficiently adopt service mesh features without introducing a significant resource overhead to their end consumers.
 
 Here at Solo.io a common story that we hear among our customer-base and prospects that goes like this:
-"The Security team has mandated a zero-trust posture across the entire organization, and as a result of this requirement I am looking to adopt a service mesh. However, in doing some research we have discovered that leveraging a sidecar based approach will incur some additional cost in resource reservations per app (by default in Istio 100m CPU and 128Mi MEM per sidecar), and operational overhead in managing the lifecycle of a sidecar deployment"
+"The Security team has mandated a zero-trust posture across the entire organization, and as a result of this requirement I am looking to adopt a service mesh. However, in doing some research we have discovered that leveraging a sidecar based approach will incur some additional cost in resource reservations per app (by default in Istio 100m CPU and 128Mi MEM per sidecar or 0.5 CPU per 1000 RPS), and operational overhead in managing the lifecycle of a sidecar deployment"
 
 For teams with tight budgets, complying with this mandate presents significant opportunity costs. Trade-offs such as deciding between hiring additional staff or investing in other areas of the business versus bearing the increased cost of resources for the application becomes a critical consideration.
 
