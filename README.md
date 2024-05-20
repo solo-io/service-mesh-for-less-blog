@@ -35,7 +35,7 @@ Ambient mode enables us to meet the mTLS requirement with a model that is less c
 
 # Let's look at some numbers
 
-Lets take the following workload for our large scale application experiment:
+Let's take the following workload for our large scale application experiment:
 
 Application Details:
 - 50 namespace isolated applications
@@ -43,17 +43,23 @@ Application Details:
     - 4 deployments per namespace, 1 replicas per deployment 
     - A > B1,B2 > C
     - CPU requests: 700m // CPU limits: 700m (guaranteed QoS)
-    - MEM requests: 500Mi // MEM limits: 500Mi (guaranteed QoS)
+    - MEM requests: 500Mi // MEM limits: 500Mi (guaranteed QoS) 
 
 Baseline Resource Requirements:
 When calculating the baseline resource requirements without service mesh enabled:
 - Total application baseline requirements are 140 CPU cores and 100 GB memory
 
-Total expected baseline requirements: 140 CPU Cores and 100 GB memory. Note that this excludes the load generator clients in this calculation as we are focusing on just the baseline application footprint for this exercise
+Note that this excludes the load generator clients in this calculation as we are focusing on just the baseline application footprint for this exercise
 
 A high level architecture looks like this:
 
 ![performance-architecture-2](.images/performance-architecture-2.png)
+
+This workload represents an application configured in a Namespace-Per-Tenant pattern, where each tenant operates in an isolated namespace to ensure resource and security separation. The application is designed with a classic 3-tier fan-out architecture, where an initial service sends requests to multiple downstream services, providing a more representative assessment of expected performance compared to a simpler load generation client targeting a single service. A load generator client is configured to target the entry point of each namespace, simulating real-world traffic and interactions between multiple services within the namespace. To ensure a guaranteed Quality of Service (QoS) every application is configured to have the same pod requests and limits.
+
+- Service A: This is the entry point for the application in each namespace. It receives incoming traffic from a load generator (vegeta) and routes requests to the intermediate services.
+- Service B1 and Service B2: These intermediate services process requests forwarded by Service A
+- Service C: This service aggregates the results from Service B1 and Service B2 and performs the final processing before returning the response.
 
 ## In an ideal bin packing scenario
 
