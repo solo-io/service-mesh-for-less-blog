@@ -104,8 +104,8 @@ Taking the example app above, we ran the following experiment to validate that a
 First we set some baseline performance requirements for our 3-tier application workload that is deployed across 50 namespaces. 
 
 Our application latency expectations:
-- Max P50 latency < 5ms
-- Max P99 latency < 15ms
+- Max P50 latency < 10ms
+- Max P95 latency < 15ms
 
 We configured a Vegeta loadgenerator client per-namespace with a guaranteed QoS by setting resource requests/limits to `500m` CPU and `300Mi` MEM for this experiment:
 
@@ -117,10 +117,21 @@ Our Loadgenerator Client Configuration:
   - CPU requests: 500m // CPU limits: 500m (guaranteed QoS)
   - MEM requests: 300Mi // MEM limits: 300Mi (guaranteed QoS)
 
-Given the fan-out architecture shown in the high level architecture section above with loadgen > A > B1,B2 > C at 450 RPS, we expect the **total mesh traffic in the cluster to be ~112K RPS!!**
+Given the fan-out architecture shown in the high level architecture section above with loadgen > A > B1,B2 > C at 450 RPS, we expect the **total mesh traffic in the cluster to be over 110K RPS!!**
+
+### Try for yourself!
+
+If you are interested in running this test, the following resources are available in this repo:
+
+- /gke-deploy - basic instructions on how to deploy GKE clusters, if required
+- /tiered-app - kustomize overlays for various # of application per namespaces
+- /loadgenerators - kustomize overlays for various # of load generator clients per namespaces
+- ambient-setup.md - ambient setup instructions
+- istio-sidecar-setup.md - istio sidecar setup instructions
+- linkerd-setup.md - linkerd setup instructions
 
 ## Baseline testing
-Starting with our baseline application (no mesh) to understand the base performance characteristics
+Starting with our baseline application (no mesh) to understand the base performance characteristics of our multi-tiered application
 
 A run of the test produced results similar to the following:
 ```bash
