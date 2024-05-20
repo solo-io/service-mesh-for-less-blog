@@ -149,10 +149,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency ~`1.5ms`
-- highest P99 latency ~`2.1ms`
+- average P50 latency ~`1.57ms`
+- average P95 latency ~`1.82ms`
 
-We can reasonably assume that the baseline performance at 450RPS for the sample application is typically between `1.5ms - 2.1ms`. Full results for the baseline tests can be seen in the `/experiment-data` directory
+We can reasonably assume these results represent the baseline performance at 450RPS for the sample application. Full results for the baseline tests can be seen in the `/experiment-data` directory
 
 ## Linkerd mTLS testing with stable-2.14.10
 
@@ -199,10 +199,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency `4.1ms`
-- highest P99 latency `6.5ms`
+- average P50 latency ~`4.48ms`
+- average P95 latency ~`5.19ms`
 
-From these results, we can derive that the addition of sidecars to our test application adds around `2.6ms - 4.4ms` of latency to our application round-trip for our 3-tier service. Full results for the Linkerd tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of sidecars to our test application adds around `2.91ms` (p50) to `3.37ms` (p95) of latency to our application round-trip for our 3-tier service. Full results for the Linkerd tests can be seen in the `/experiment-data` directory
 
 ## Istio Sidecar mTLS testing with v1.22.0
 
@@ -248,10 +248,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency `6.1ms`
-- highest P99 latency `10.8ms`
+- average P50 latency ~`6.38ms`
+- average P95 latency ~`7.54ms`
 
-From these results, we can derive that the addition of sidecars to our test application adds around `4.5ms - 8.7ms` of latency to our application round-trip for our 3-tier service. Full results for the sidecar tests can be seen in the `/experiment-data` directory
+From these results, we can derive that the addition of sidecars to our test application adds around `4.81ms` (p50) to `5.72ms` (p95) of latency to our application round-trip for our 3-tier service. Full results for the Linkerd tests can be seen in the `/experiment-data` directory
 
 ## Istio ambient mode mTLS testing with v1.22.0
 
@@ -299,15 +299,13 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency `2.4ms`
-- highest P99 latency `3.3ms`
+- average P50 latency `2.36ms`
+- average P95 latency `2.67ms`
 
-From these results, we can derive that the addition of the ambient data plane to our test application adds around `0.9ms - 1.2ms` of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
+From these results, we can derive that the addition of the ambient data plane to our test application adds around `0.79ms` (p50) to `0.85ms` (p95) of latency to our application round-trip for our 3-tier service. These are pretty excellent results for latency performance while providing mTLS for our applications! Full results for the ambient mode tests can be seen in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the L4-only datapath, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#dataplane-details)
 
-### A detail worth noting
-The Istio community has been hard at work continuously improving the performance of the ambient mode components. From the Alpha release of ambient in 1.21.0 to Beta in 1.22.0 we observed an decrease from `0.9ms - 2ms` to `0.9ms - 1.2ms` of latency added to our application round-trip call to which is a notable **40%** improvement in P99 latency!
 
 ## Istio ambient mode mTLS + L4 mutual auth
 
@@ -390,10 +388,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency `2.4ms`
-- highest P99 latency `3.9ms`
+- average P50 latency `2.54ms`
+- average P95 latency `2.89ms`
 
-Comparing these results to the previous test, we observe that enforcing mutual authentication using Istio's AuthorizationPolicy incurs an additional latency of `0.1ms - 0.6ms` compared to our previous L4 mTLS-only results, and `0.9ms - 1.8ms` compared to baseline. These are excellent results for latency performance while providing both mTLS and mutual authentication for our applications! Full results for the ambient mode tests are available in the `/experiment-data` directory.
+Comparing these results to the previous test, we observe that enforcing mutual authentication using Istio's AuthorizationPolicy incurs `0.18ms` (p50) to `0.22ms` (p95) of latency to our application compared to our previous L4 mTLS-only results, and `0.97ms` (p50) to `1.07ms` (p95) compared to baseline. These are excellent results for latency performance while providing both mTLS and mutual authentication for our applications! Full results for the ambient mode tests are available in the `/experiment-data` directory.
 
 For a detailed description on using L4 security policies, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/usage/l4-policy/)
 
@@ -472,10 +470,10 @@ Status Codes  [code:count]                      200:270000
 ```
 
 ### Results across three 10 minute runs:
-- lowest P50 latency `4.1ms`
-- highest P99 latency `9.9ms`
+- average P50 latency `5.57ms`
+- average P95 latency `6.65ms`
 
-Comparing these results to the L4 mTLS-only results, we observe that enforcing L4 + L7 mutual authentication using Istio's `AuthorizationPolicy` incurs an additional latency of `1.7ms - 6.6ms` which results in an additional `2.6ms - 7.8ms` latency compared to baseline. Full results for the ambient mode tests are available in the `/experiment-data` directory.
+Comparing these results to the previous test, we observe that adding a waypoint proxy and enforcing L7 mutual authentication using Istio's AuthorizationPolicy incurs `3.03ms` (p50) to `3.76ms` (p95) of latency to our application compared to our previous L4 mTLS-only results, and `4ms` (p50) to `4.83ms` (p95) compared to baseline. Full results for the ambient mode tests are available in the `/experiment-data` directory.
 
 For a detailed description of the high-level architecture of the Ztunnel datapath via an interim waypoint, please refer to the  [Istio documentation](https://istio.io/latest/docs/ambient/architecture/data-plane/#in-mesh-routing-with-waypoint-enabled)
 
@@ -494,24 +492,26 @@ From a baseline monthly cost of $5475 for our 50 namespace workload
 - Istio's ambient data plane mode (L4 only) incurs additional cost of **5%** - substantially lower than using sidecars!
 - Istio's ambient mode with waypoint proxies (configured to be highly available) for the full L4/L7 feature set is also lower at a **15%** increase in cost
 
-From a baseline performance of `1.5ms` - `2.1ms`
+For performance characteristics, our experiment data has been summarized in this table below:
 
-- Linkerd: adds `2.6ms` - `4.4ms` of round trip latency for L4 mTLS
-- Istio in sidecar mode: adds `4.5ms` - `8.7ms` of round trip latency for  L4/L7 mTLS + L7 features
-- Istio in ambient mode: adds `0.9ms` - `1.2ms` of round trip latency for L4 mTLS only
-- Istio in ambient mode: adds `0.9ms` - `1.8ms` of round trip latency for L4 mTLS + L4 mutual auth
-- Istio in ambient mode with waypoint proxies: adds `2.6ms` - `7.8ms` of round trip latency for L4/L7 mTLS + L4/L7 mutual auth
+![experiment-data-results-1](.images/experiment-data-results-1.png)
+
+From a baseline performance of `1.57ms` (p50) and `1.82ms` (p95)
+
+- Linkerd: adds `2.91ms` (p50) and `3.37ms` (p95) of round trip latency for L4 mTLS
+- Istio in sidecar mode: adds `4.81ms` (p50) and `5.72ms` (p95) of round trip latency for  L4/L7 mTLS + L7 features
+- Istio in ambient mode: adds `0.79ms` (p50) and `0.85ms` (p95) of round trip latency for L4 mTLS only
+- Istio in ambient mode: adds `0.97ms` (p50) and `1.07ms` (p95) of round trip latency for L4 mTLS + L4 mutual auth
+- Istio in ambient mode with waypoint proxies: adds `4ms` (p50) and `4.83ms` (p95) of round trip latency for L4/L7 mTLS + L4/L7 mutual auth
 
 ![percentage-improvement-equation](.images/percentage-improvement-equation-1.png)
 
 Maximum Latency Improvement:
 
-- Sidecar mode maximum latency: 10.8ms
-- Ambient mode maximum latency: 3.3ms
+- Sidecar mode maximum p95 latency: `7.54ms`
+- Ambient mode maximum p95 latency: `2.67ms`
 
-![max-percentage-improvement](.images/percentage-improvement-equation-2.png)
-
-As shown above, depending on the use-case the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **70%** in the case where only mTLS is required!
+As shown above, depending on the use-case the introduction of Istio's ambient mode architecture can improve our expected latency performance by up to **65%** in the case where only mTLS is required!
 
 Adopting a sidecarless architecture additionally reduces the operational overhead to truly be "ambient" for the developer persona. As a result, the organization as a whole benefits from improved resource utilization while maintaining or even enhancing application performance. It is clear here that we are benefitting while doing more for less!
 
