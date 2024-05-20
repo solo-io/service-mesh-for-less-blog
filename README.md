@@ -422,17 +422,19 @@ In this blog we explored several main value propositions for Istio's ambient mod
 
 In our hypothetical scenario, the adoption of ambient mode fulfills the mTLS mandate from the Security team without imposing significant additional costs on the Application team. From a performance perspective, the additional latency incurred by utilizing a mesh is minimal
 
+![bin-packing-3](.images/bin-packing-4.png)
+
 From a baseline monthly cost of $5475 for our 50 namespace workload
 
 - Linkerd and Istio's sidecar data plane mode can add up to **36%** increase in infrastructure costs
 - Istio's ambient data plane mode (L4 only) incurs additional cost of **5%** - substantially lower than using sidecars!
 - Istio's ambient mode with waypoint proxies (configured to be highly available) for the full L4/L7 feature set is also lower at a **15%** increase in cost
 
-For performance characteristics, our experiment data has been summarized in this table below:
+For our workload, we designed a classic 3-tier fan-out architecture, where an initial service sends requests to multiple downstream services. Our performance characteristics experiment data has been summarized in this table below:
 
 ![experiment-data-results-1](.images/experiment-data-results-1.png)
 
-From a baseline performance of `1.57ms` (p50) and `1.82ms` (p95)
+From a baseline performance of `1.57ms` (p50) and `1.82ms` (p95) end-to-end for our multi-tiered application
 
 - Linkerd: adds `2.91ms` (p50) and `3.37ms` (p95) of round trip latency for L4 mTLS
 - Istio in sidecar mode: adds `4.81ms` (p50) and `5.72ms` (p95) of round trip latency for  L4/L7 mTLS + L7 features
