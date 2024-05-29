@@ -432,7 +432,7 @@ From a baseline monthly cost of $5475 for our 50 namespace workload
 
 For our workload, we designed a classic 3-tier fan-out architecture, where an initial service sends requests to multiple downstream services. Our performance characteristics experiment data has been summarized in this table below:
 
-![experiment-data-results-2](.images/experiment-data-results-2.png)
+![experiment-data-results-2](.images/experiment-data-results-3.png)
 
 From a baseline performance of `1.57ms` (p50) and `1.82ms` (p95) end-to-end for our multi-tiered application
 
