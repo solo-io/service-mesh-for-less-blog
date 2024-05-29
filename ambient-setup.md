@@ -96,6 +96,9 @@ curl httpbin.httpbin.svc.cluster.local:8000/get
 ```
 
 ## watch logs of ztunnel for traffic interception
+
+**Note:** if `logLevel` on ztunnel is set to `error` then nothing will show. Switch to `logLevel: info` instead. We configure `logLevel: error` to reduce noise for our performance test
+
 ```bash
 kubectl logs -n kube-system ds/ztunnel -f
 ```
