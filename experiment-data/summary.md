@@ -30,7 +30,7 @@ p90: 2.95ms
 p95: 3.08ms
 p99: 3.49ms
 
-1.22.0 Ambient mTLS 450RPS (no auth)
+1.22.1 Ambient mTLS 450RPS (no auth)
 p50: 2.36ms
 p90: 2.56ms
 p95: 2.67ms

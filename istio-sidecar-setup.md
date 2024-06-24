@@ -8,14 +8,14 @@ helm repo update
 
 ## install istio-base
 ```bash
-helm upgrade --install istio-base istio/base -n istio-system --version 1.22.0 --create-namespace
+helm upgrade --install istio-base istio/base -n istio-system --version 1.22.1 --create-namespace
 ```
 
 ## install istiod
 ```bash
 helm upgrade --install istiod istio/istiod \
 -n istio-system \
---version=1.22.0 \
+--version=1.22.1 \
 -f -<<EOF
 meshConfig:
   accessLogFile: /dev/stdout
